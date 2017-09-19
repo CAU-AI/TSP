@@ -10,6 +10,7 @@ public class MapInfo {
 	private int numOfCity; // 도시 숫자
 	private int mapType; // Sample 파일의 타입, 1. Square, 2.Triangle
 	private int distanceMap[][]; // 두 도시간의 거리 저장, symmetric matrix
+	private Point points[];
 
 	public static void setMapInfoInstance(String filename, int mapType){
 		instance = new MapInfo(filename, mapType);
@@ -67,14 +68,14 @@ public class MapInfo {
 			}
 		}
 
-		Point[] pList = new Point[dimension];
+		points = new Point[dimension];
 		for(int i=0;i<dimension;i++){
 			try {
 				str = reader.readLine();
 				String[] splitedStr = str.split(" ");
-				pList[i] = new Point(Integer.parseInt(splitedStr[1]), Integer.parseInt(splitedStr[2]));
+				points[i] = new Point(Integer.parseInt(splitedStr[1]), Integer.parseInt(splitedStr[2]));
 				for(int j=0; j<i;j++){
-					int distance = (int)Math.hypot(pList[j].x - pList[i].x, pList[j].y - pList[i].y); // 점 사이의 거리
+					int distance = (int)Math.hypot(points[j].x - points[i].x, points[j].y - points[i].y); // 점 사이의 거리
 					writer.write(String.valueOf(distance));
 					writer.write(" ");
 				}
