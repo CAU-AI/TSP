@@ -1,30 +1,114 @@
 package tspUtil;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.LineNumberReader;
+import java.io.*;
 
 public class MapInfo {
 	//Singleton pattern
+	private final int MAP_TYPE_SQUARE = 1;
+	private final int MAP_TYPE_TRIANGLE = 2;
 	private static MapInfo instance = null;
 	private int numOfCity; // 도시 숫자
+	private int mapType; // Sample 파일의 타입, 1. Square, 2.Triangle
 	private int distanceMap[][]; // 두 도시간의 거리 저장, symmetric matrix
 
-	
-
-	public static void setMapInfoInstance(String filename){
-		instance = new MapInfo(filename);
+	public static void setMapInfoInstance(String filename, int mapType){
+		instance = new MapInfo(filename, mapType);
 	}
 	
 	public static MapInfo getInstance(){
 		return instance;
 	}
 	
-	private MapInfo(String filename) {
+	private MapInfo(String filename, int mapType) {
+		this.setMapType(mapType, filename);
 		this.setNumOfCity(filename);
 		this.setDistanceMap(filename);
+	}
+
+	public void setMapType(int mapType, String filename){
+		this.mapType = mapType;
+		if(mapType == MAP_TYPE_SQUARE){
+			convertFileToTriangleType(filename);
+		}
+	}
+
+	private void convertFileToTriangleType(String filename){
+		BufferedReader reader = null;
+		FileWriter fw = null;
+		BufferedWriter writer = null;
+
+		try {
+			reader = new BufferedReader(new FileReader(filename));
+			StringBuffer sb = new StringBuffer(filename);
+			sb.insert(filename.length() - 4, "_tri");
+			fw = new FileWriter(sb.toString(), false);
+			writer = new BufferedWriter(fw);
+		} catch (FileNotFoundException e) {
+			System.err.println("File not found");
+			System.exit(1);
+		} catch (IOException E){
+			System.err.println("IO Exception");
+			System.exit(1);
+		}
+
+		String str = null;
+		int dimension = 0;
+		for(int i=0;i<8;i++){
+			try {
+				str = reader.readLine();
+			} catch (IOException e) {
+				System.err.println("File read error");
+				System.exit(1);
+			}
+			if (str == null || str.equals(""))
+				break;
+			if(i==5){ //set dimension
+				dimension = Integer.parseInt(str.substring(str.length()-3, str.length()));
+			}
+		}
+
+		Point[] pList = new Point[dimension];
+		for(int i=0;i<dimension;i++){
+			try {
+				str = reader.readLine();
+				String[] splitedStr = str.split(" ");
+				pList[i] = new Point(Integer.parseInt(splitedStr[1]), Integer.parseInt(splitedStr[2]));
+				for(int j=0; j<i;j++){
+					int distance = (int)Math.hypot(pList[j].x - pList[i].x, pList[j].y - pList[i].y); // 점 사이의 거리
+					writer.write(String.valueOf(distance));
+					writer.write(" ");
+				}
+				writer.write(String.valueOf(0)); //자기 자신과의 거리
+				writer.newLine();
+			} catch (IOException e) {
+				System.err.println("File read error");
+				e.printStackTrace();
+				System.exit(1);
+			}
+		}
+
+		//스트림 닫기
+		if(reader!=null){
+			try{
+				reader.close();
+			}catch(IOException e){
+				e.printStackTrace();
+			}
+		}
+		if(writer!=null){
+			try {
+				writer.close();
+			}catch (IOException e){
+
+			}
+		}
+		if(fw!=null){
+			try{
+				fw.close();
+			}catch(IOException e){
+
+			}
+		}
 	}
 	
 	public int getNumOfCity() {
@@ -44,6 +128,11 @@ public class MapInfo {
 	
 	private void setDistanceMap(String filename) {
 		this.distanceMap = new int[this.numOfCity][this.numOfCity];
+
+		if(mapType == 1){
+			StringBuffer sb = new StringBuffer(filename);
+			filename = sb.insert(filename.length()-4, "_tri").toString(); //TRI용 변환 파일 사용
+		}
 
 		BufferedReader reader = null;
 
@@ -87,6 +176,10 @@ public class MapInfo {
 		this.numOfCity = 0;
 
 		LineNumberReader reader = null;
+		if(mapType == 1){
+			StringBuffer sb = new StringBuffer(filename);
+			filename = sb.insert(filename.length()-4, "_tri").toString(); //TRI용 변환 파일 사용
+		}
 
 		try {
 			reader = new LineNumberReader(new FileReader(filename));
@@ -113,6 +206,14 @@ public class MapInfo {
 		} catch (IOException e) {
 			System.err.println("Reader close error");
 			System.exit(1);
+		}
+	}
+
+	static class Point{
+		int x,y;
+		Point(int x, int y){
+			this.x=x;
+			this.y=y;
 		}
 	}
 }

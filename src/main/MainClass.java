@@ -22,11 +22,15 @@ import tspUtil.PathCheck;
 public class MainClass {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		System.out.print("Enter Map name (Usually Sample.txt): ");
 		Scanner scan = new Scanner(System.in);
+
+		System.out.print("Enter Sample Type (1. Square, 2. Triangle) : ");
+		int sampleType = scan.nextInt();
+
+		System.out.print("Enter Map name (Usually Sample.txt): ");
+
 		String mapName = scan.next();
-		MapInfo.setMapInfoInstance(mapName);
+		MapInfo.setMapInfoInstance(mapName, sampleType);
 		System.out.print("Select Alg (1. Nearest Neighbor, 2. Two-Opt, 3. SA, 4. GA) : ");
 
 		int input = scan.nextInt();
