@@ -20,6 +20,10 @@ public class SASearch extends TSPAlgorithm{
 		this.numOfNextHop = numOfNextHop;
 	}
 
+	public void setTemperature(double temperature){
+		this.temperature = temperature;
+	}
+
 	public void setSAParameter(double temperature, double deltaTemperature) {
 		if (temperature <= 0) {
 			System.err.println("Temperature must be bigger than 0");
@@ -47,7 +51,6 @@ public class SASearch extends TSPAlgorithm{
 
 	@Override
 	public int[] calculatePath(int[] path) {
-		// TODO Auto-generated method stub
 
 		//인수로 받은 순서를 복사한다.
 		int[] bestPath = Arrays.copyOf(path, path.length);
@@ -102,8 +105,12 @@ public class SASearch extends TSPAlgorithm{
 				//System.out.println("bestScore : " + bestScore + ", prob : " + (float)prob);
 			}
 
-			this.temperature *= deltaTemperature;
+			// normal function
+			 this.temperature *= deltaTemperature;
 
+			// sigmoid function
+			// this.temperature = ((1/(1+Math.pow(Math.E, (-1*this.temperature)))));
+			// System.out.println("temperature : " +temperature);
 		}
 		return bestPath;
 	}
