@@ -1,5 +1,7 @@
 package main;
 
+import java.io.File;
+import java.io.InputStream;
 import java.util.Scanner;
 
 import ga.Crossover;
@@ -24,13 +26,32 @@ public class MainClass {
 	public static void main(String[] args) {
 		Scanner scan = new Scanner(System.in);
 
-		System.out.print("Enter Sample Type (1. Square, 2. Triangle) : ");
-		int sampleType = scan.nextInt();
+		int mapType= 0, openType=0;
+		System.out.print("Open type (1. New File, 2. Load Template) : ");
+		openType = scan.nextInt();
 
-		System.out.print("Enter Map name (Usually Sample.txt): ");
+		String fileName = null;
+		if(openType == MapInfo.OPEN_TYPE_NEW_FILE) {
+			System.out.print("Enter Map Type (1. Square, 2. Triangle) : ");
+			mapType = scan.nextInt();
 
-		String mapName = scan.next();
-		MapInfo.setMapInfoInstance(mapName, sampleType);
+			System.out.print("Enter Map name (Usually Sample.txt): ");
+			fileName = scan.next();
+		}else{
+			System.out.print("Choose Template (");
+			File file = new File("./map");
+			for(int i=0; i<file.list().length;i++){
+				System.out.print(i+1+"."+file.list()[i]);
+				if(i<file.list().length-1)
+					System.out.print(", ");
+			}
+			System.out.print("): ");
+			String mapName = file.list()[scan.nextInt()-1];
+			fileName = ".\\map\\" + mapName + "\\Sample_" + mapName + ".txt";
+			mapType = MapInfo.MAP_TYPE_SQUARE;
+		}
+
+		MapInfo.setMapInfoInstance(fileName, mapType);
 		System.out.print("Select Alg (1. Nearest Neighbor, 2. Two-Opt, 3. SA, 4. GA) : ");
 
 		int input = scan.nextInt();

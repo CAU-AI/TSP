@@ -4,8 +4,10 @@ import java.io.*;
 
 public class MapInfo {
 	//Singleton pattern
-	private final int MAP_TYPE_SQUARE = 1;
-	private final int MAP_TYPE_TRIANGLE = 2;
+	public static final int MAP_TYPE_SQUARE = 1;
+	public static final int OPEN_TYPE_NEW_FILE = 1;
+	public static final int OPEN_TYPE_LOAD_TEMPLATE = 2;
+	public static final int MAP_TYPE_TRIANGLE = 2;
 	private static MapInfo instance = null;
 	private int numOfCity; // 도시 숫자
 	private int mapType; // Sample 파일의 타입, 1. Square, 2.Triangle
@@ -20,7 +22,7 @@ public class MapInfo {
 		return instance;
 	}
 	
-	private MapInfo(String filename, int mapType) {
+	private MapInfo(String filename,int mapType) {
 		this.setMapType(mapType, filename);
 		this.setNumOfCity(filename);
 		this.setDistanceMap(filename);
@@ -33,19 +35,19 @@ public class MapInfo {
 		}
 	}
 
-	private void convertFileToTriangleType(String filename){
+	private void convertFileToTriangleType(String fileName){
 		BufferedReader reader = null;
 		FileWriter fw = null;
 		BufferedWriter writer = null;
 
 		try {
-			reader = new BufferedReader(new FileReader(filename));
-			StringBuffer sb = new StringBuffer(filename);
-			sb.insert(filename.length() - 4, "_tri");
+			reader = new BufferedReader(new FileReader(fileName));
+			StringBuffer sb = new StringBuffer(fileName);
+			sb.insert(fileName.length() - 4, "_tri");
 			fw = new FileWriter(sb.toString(), false);
 			writer = new BufferedWriter(fw);
 		} catch (FileNotFoundException e) {
-			System.err.println("File not found");
+			System.err.println("convertFileToTriangleType - File not found");
 			System.exit(1);
 		} catch (IOException E){
 			System.err.println("IO Exception");
@@ -79,7 +81,7 @@ public class MapInfo {
 					writer.write(String.valueOf(distance));
 					writer.write(" ");
 				}
-				writer.write(String.valueOf(0)); //자기 자신과의 거리
+				writer.write(String.valueOf(0) + " "); //자기 자신과의 거리
 				writer.newLine();
 			} catch (IOException e) {
 				System.err.println("File read error");
@@ -140,7 +142,7 @@ public class MapInfo {
 		try {
 			reader = new BufferedReader(new FileReader(filename));
 		} catch (FileNotFoundException e) {
-			System.err.println("File not found");
+			System.err.println("setDistanceMap - File not found");
 			System.exit(1);
 		}
 
@@ -185,7 +187,7 @@ public class MapInfo {
 		try {
 			reader = new LineNumberReader(new FileReader(filename));
 		} catch (FileNotFoundException e) {
-			System.err.println("File not found");
+			System.err.println("setNumOfCity - File not found");
 			System.exit(1);
 		}
 		String str = null;
