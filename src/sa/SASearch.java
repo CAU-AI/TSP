@@ -64,6 +64,9 @@ public class SASearch extends TSPAlgorithm{
 
 
 			//복사한 인수의 순서를 한번 더 복사한다.
+			int[] trialPath_insert = Arrays.copyOf(bestPath, bestPath.length);
+			int[] trialPath_inverse = Arrays.copyOf(bestPath, bestPath.length);
+			int[] trialPath_swap= Arrays.copyOf(bestPath, bestPath.length);
 			int[] trialPath = Arrays.copyOf(bestPath, bestPath.length);
 
 
@@ -78,19 +81,34 @@ public class SASearch extends TSPAlgorithm{
 			}*/
 
 			//순서를 바꿔본다
-			for(int i = 0; i < this.numOfNextHop ; i++){
+			//for(int i = 0; i < this.numOfNextHop ; i++){
 				int[] twoRandNumber = GetTwoRandomNumber.getTwoRandomNumberReal();
 				int firstPoint = twoRandNumber[0];
 				int secondPoint = twoRandNumber[1];
-				trialPath = this.twoOptSearch.swapPathReal(trialPath, firstPoint, secondPoint);
-				//trialPath = this.twoOptSearch.swap(trialPath, firstPoint, secondPoint);
-			}
+				this.twoOptSearch.setSearchMethod(TwoOptSearch.METHOD_INSERT);
+				trialPath_insert = this.twoOptSearch.calculatePath(trialPath);
 
-			//패스를 계산한다.
-			trialPath = this.twoOptSearch.calculatePath(trialPath);
+				this.twoOptSearch.setSearchMethod(TwoOptSearch.METHOD_INVERSE);
+				trialPath_inverse = this.twoOptSearch.calculatePath(trialPath);
+
+				this.twoOptSearch.setSearchMethod(TwoOptSearch.METHOD_SWAP);
+				trialPath_swap = this.twoOptSearch.calculatePath(trialPath);
+			//}
 
 			//패스의 점수를 저장한다.
-			int trialScore = PathCheck.getPathCost(trialPath);
+			int trialScore_insert = PathCheck.getPathCost(trialPath_insert);
+			int trialScore_inverse = PathCheck.getPathCost(trialPath_inverse);
+			int trialScore_swap = PathCheck.getPathCost(trialPath_swap);
+
+			if(trialScore_insert < trialScore_inverse){
+				trialPath = trialPath_insert;
+				System.out.println("insert is best");
+			}else{
+				trialPath = trialPath_inverse;
+				System.out.println("inverse is best");
+
+			}
+			int trialScore = Math.min(trialScore_insert, trialScore_inverse);
 
 			//어떤 랜덤값보다 확률이 크다면
 			double prob = this.getAcceptProbability(bestScore, trialScore);

@@ -7,6 +7,9 @@ import tspUtil.PathCheck;
 import tspUtil.TSPAlgorithm;
 
 public class TwoOptSearch extends TSPAlgorithm{
+	public static final int METHOD_INSERT = 1;
+	public static final int METHOD_INVERSE = 2;
+	public static final int METHOD_SWAP = 3;
 
 	protected int limitTrial;
 	
@@ -48,24 +51,29 @@ public class TwoOptSearch extends TSPAlgorithm{
 			//시험 패스를 가져온다.
 			int [] trialPath = Arrays.copyOf(bestPath, bestPath.length);
 
+			if(searchMethod == METHOD_INSERT) {
+				insert(trialPath, firstPoint, secondPoint);
+			}else if(searchMethod ==METHOD_INVERSE){
+				inverse(trialPath, firstPoint, secondPoint);
+			}else{
+				swap(trialPath, firstPoint, secondPoint);
+			}
 			//두 랜덤 넘버에 해당하는 패스 순서를 바꾼다
-			swapPathReal(trialPath, firstPoint, secondPoint);
-			//swap(trialPath, firstPoint, secondPoint);
 
 			//시험 패스의 점수를 계산한다.
-			int trialScroe = PathCheck.getPathCost(trialPath);
+			int trialScore = PathCheck.getPathCost(trialPath);
 
 			//이전 경로보다 현재 경로가 더 짧다면
 			//현재경로를 가장 좋은 경로로 저장해둔다.
-			if(trialScroe < bestScore){
+			if(trialScore < bestScore){
 				bestPath = Arrays.copyOf(trialPath, trialPath.length);
-				bestScore = trialScroe;
-
+				bestScore = trialScore;
 			}
 			trial++;
 		}
 		return bestPath;
 	}
+
 
 	@Override
 	public int[] calculatePath(int startPoint) {
@@ -101,7 +109,28 @@ public class TwoOptSearch extends TSPAlgorithm{
 		return arr;
 	}
 
-	public int[] swapPathReal(int [] arr, int firstPoint, int secondPoint){
+	public int[] insert(int[] arr, int firstPoint, int secondPoint){
+		if(firstPoint<secondPoint){
+			int temp = arr[firstPoint];
+			for(int i=firstPoint; i<secondPoint-1;i++){
+				arr[i] = arr[i+1];
+			}
+			arr[secondPoint] = temp;
+		}else{
+			int temp = arr[firstPoint];
+			for(int i=firstPoint; i<arr.length-1; i++){
+				arr[i] = arr[i+1];
+			}
+			arr[arr.length-1] = arr[0];
+			for(int i=0; i<secondPoint-1;i++){
+				arr[i] = arr[i+1];
+			}
+			arr[secondPoint] = temp;
+		}
+		return arr;
+	}
+
+	public int[] inverse(int [] arr, int firstPoint, int secondPoint){
 		if(firstPoint < secondPoint) {
 			for (int i = 0; i < (secondPoint - firstPoint) / 2; i++) {
 				int temp = arr[secondPoint - i];

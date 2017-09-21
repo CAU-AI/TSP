@@ -146,7 +146,6 @@ public class MainClass {
 				}
 			}
 		}).start();
-
 		/* 기존 코드
 		NearestNeighbor nearestNeighbor = new NearestNeighbor();
 		int min = 1000000;
