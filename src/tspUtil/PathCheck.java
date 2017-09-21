@@ -20,6 +20,9 @@ public class PathCheck {
 		for(int i = 0; i < path.length - 1;i++){
 			totalCost += map[path[i]][path[i+1]];
 		}
+
+		if(path[0] != path[path.length -1])
+			totalCost += map[path[path.length - 1]][path[0]];
 		return totalCost;
 	}
 	/*
