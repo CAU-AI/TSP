@@ -2,6 +2,9 @@ package sa;
 
 import java.util.Arrays;
 
+import greedy.InsertSearch;
+import greedy.InverseSearch;
+import greedy.SwapSearch;
 import greedy.TwoOptSearch;
 import tspUtil.GetTwoRandomNumber;
 import tspUtil.PathCheck;
@@ -61,54 +64,37 @@ public class SASearch extends TSPAlgorithm{
 		//온도가 1보다 크다면 계속 돈다
 		//온도가 1과 같거나 작아지면 멈춘다
 		while (this.temperature > 1) {
-
-
 			//복사한 인수의 순서를 한번 더 복사한다.
-			int[] trialPath_insert = Arrays.copyOf(bestPath, bestPath.length);
-			int[] trialPath_inverse = Arrays.copyOf(bestPath, bestPath.length);
-			int[] trialPath_swap= Arrays.copyOf(bestPath, bestPath.length);
+			int[] insertTrialPath = Arrays.copyOf(bestPath, bestPath.length);
+			int[] inverseTrialPath = Arrays.copyOf(bestPath, bestPath.length);
+			int[] swapTrialPath= Arrays.copyOf(bestPath, bestPath.length);
 			int[] trialPath = Arrays.copyOf(bestPath, bestPath.length);
 
 
-			//순서를 바꿔본다
-			/*
-			for(int i = 0; i < this.numOfNextHop ; i++){
-				int[] twoRandNumber = GetTwoRandomNumber.getTwoRandomNumber();
-				int firstPoint = twoRandNumber[0];
-				int secondPoint = twoRandNumber[1];
-				trialPath = this.twoOptSearch.swapPath(trialPath, firstPoint, secondPoint);
-				//trialPath = this.twoOptSearch.swap(trialPath, firstPoint, secondPoint);
-			}*/
+			int[] twoRandNumber = GetTwoRandomNumber.getTwoRandomNumberReal();
+			int firstPoint = twoRandNumber[0];
+			int secondPoint = twoRandNumber[1];
 
-			//순서를 바꿔본다
-			//for(int i = 0; i < this.numOfNextHop ; i++){
-				int[] twoRandNumber = GetTwoRandomNumber.getTwoRandomNumberReal();
-				int firstPoint = twoRandNumber[0];
-				int secondPoint = twoRandNumber[1];
-				this.twoOptSearch.setSearchMethod(TwoOptSearch.METHOD_INSERT);
-				trialPath_insert = this.twoOptSearch.calculatePath(trialPath);
+			InsertSearch insertSearch = new InsertSearch();
+			insertTrialPath = insertSearch.calculatePath(trialPath);
 
-				this.twoOptSearch.setSearchMethod(TwoOptSearch.METHOD_INVERSE);
-				trialPath_inverse = this.twoOptSearch.calculatePath(trialPath);
+			InverseSearch inverseSearch = new InverseSearch();
+			inverseTrialPath = inverseSearch.calculatePath(trialPath);
 
-				this.twoOptSearch.setSearchMethod(TwoOptSearch.METHOD_SWAP);
-				trialPath_swap = this.twoOptSearch.calculatePath(trialPath);
-			//}
+			SwapSearch swapSearch = new SwapSearch();
+			swapTrialPath = swapSearch.calculatePath(trialPath);
 
 			//패스의 점수를 저장한다.
-			int trialScore_insert = PathCheck.getPathCost(trialPath_insert);
-			int trialScore_inverse = PathCheck.getPathCost(trialPath_inverse);
-			int trialScore_swap = PathCheck.getPathCost(trialPath_swap);
+			int insertTrialScore = PathCheck.getPathCost(insertTrialPath);
+			int inverseTrialScore = PathCheck.getPathCost(inverseTrialPath);
+			int swapTrialScore = PathCheck.getPathCost(swapTrialPath);
 
-			if(trialScore_insert < trialScore_inverse){
-				trialPath = trialPath_insert;
-				System.out.println("insert is best");
+			if(swapTrialScore < inverseTrialScore){
+				trialPath = swapTrialPath;
 			}else{
-				trialPath = trialPath_inverse;
-				System.out.println("inverse is best");
-
+				trialPath = inverseTrialPath;
 			}
-			int trialScore = Math.min(trialScore_insert, trialScore_inverse);
+			int trialScore = Math.min(swapTrialScore, inverseTrialScore);
 
 			//어떤 랜덤값보다 확률이 크다면
 			double prob = this.getAcceptProbability(bestScore, trialScore);
@@ -132,6 +118,7 @@ public class SASearch extends TSPAlgorithm{
 		}
 		return bestPath;
 	}
+
 
 	//확률을 구한다
 	private double getAcceptProbability(int bestScore, int trialScore) {

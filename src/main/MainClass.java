@@ -146,22 +146,7 @@ public class MainClass {
 				}
 			}
 		}).start();
-		/* 기존 코드
-		NearestNeighbor nearestNeighbor = new NearestNeighbor();
-		int min = 1000000;
 
-		int size = MapInfo.getInstance().getNumOfCity();
-		for(int i = 0 ; i < size ; i ++) {
-			int[] path = nearestNeighbor.calculatePath(i);
-			int length = PathCheck.getPathCost(path);
-			if(length < min){
-				min = length;
-				minIndex = i;
-			}
-		}
-		*/
 		System.out.println("Start point : " + minIndex);
-
-
 	}
 }

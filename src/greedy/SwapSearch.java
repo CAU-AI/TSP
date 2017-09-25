@@ -1,31 +1,11 @@
 package greedy;
 
-import java.util.Arrays;
-
 import tspUtil.GetTwoRandomNumber;
 import tspUtil.PathCheck;
-import tspUtil.TSPAlgorithm;
 
-public class TwoOptSearch extends TSPAlgorithm{
+import java.util.Arrays;
 
-	protected int limitTrial;
-	
-	public TwoOptSearch(){
-		this.limitTrial = 100000;
-	}
-	
-	public TwoOptSearch(int limitTrial){
-		this.setTwoOptSearchParameter(limitTrial);
-	}
-	
-	public void setTwoOptSearchParameter(int limitTrial){
-		this.limitTrial = limitTrial;
-	}
-
-
-	//두 랜덤넘버를 뽑아서
-	//두 랜덤넘버 사이의 숫자들을 순차적으로 순서 변경하는 함수를
-	//limitTrial 번 시도한다.
+public class SwapSearch extends TwoOptSearch {
 	@Override
 	public int[] calculatePath(int [] path) {
 		// TODO Auto-generated method stub
@@ -48,8 +28,7 @@ public class TwoOptSearch extends TSPAlgorithm{
 			//시험 패스를 가져온다.
 			int [] trialPath = Arrays.copyOf(bestPath, bestPath.length);
 
-			swapPath(trialPath, firstPoint, secondPoint);
-			//두 랜덤 넘버에 해당하는 패스 순서를 바꾼다
+			swap(trialPath, firstPoint, secondPoint);
 
 			//시험 패스의 점수를 계산한다.
 			int trialScore = PathCheck.getPathCost(trialPath);
@@ -65,27 +44,30 @@ public class TwoOptSearch extends TSPAlgorithm{
 		return bestPath;
 	}
 
-
-	@Override
-	public int[] calculatePath(int startPoint) {
-		// TODO Auto-generated method stub
-		NearestNeighbor simpleGreedy = new NearestNeighbor();
-		int [] path = simpleGreedy.calculatePath(startPoint);
-		
-		path = this.calculatePath(path);
-		return path;
-	}
-
-	public int[] swapPath(int [] arr, int firstPoint, int secondPoint){
-		if(firstPoint < 1 || secondPoint > arr.length-1){
+	public int[] swapTwoPath(int [] arr, int firstPoint, int secondPoint, int thirdPoint){
+		if(firstPoint < 1 || secondPoint > arr.length-1 || thirdPoint > arr.length - secondPoint + firstPoint){
 			System.err.println("2opt.. index error in swapPath func");
 			System.exit(1);
 		}
-		for(int i = 0; i < (secondPoint - firstPoint)/2; i++){
+
+		for(int i = 0; i < (secondPoint - firstPoint)/2; i++) {
 			int temp = arr[secondPoint - i];
 			arr[secondPoint - i] = arr[firstPoint + i];
 			arr[firstPoint + i] = temp;
 		}
+
+
+		return arr;
+	}
+
+	public int[] swap(int [] arr, int firstPoint, int secondPoint){
+		if(firstPoint < 1 || secondPoint > arr.length-1){
+			System.err.println("2opt.. index error in swapPath func");
+			System.exit(1);
+		}
+		int temp = arr[secondPoint];
+		arr[secondPoint] = arr[firstPoint];
+		arr[firstPoint] = temp;
 		return arr;
 	}
 }
