@@ -2,10 +2,7 @@ package sa;
 
 import java.util.Arrays;
 
-import greedy.InsertSearch;
-import greedy.InverseSearch;
-import greedy.SwapSearch;
-import greedy.TwoOptSearch;
+import greedy.*;
 import tspUtil.GetTwoRandomNumber;
 import tspUtil.PathCheck;
 import tspUtil.TSPAlgorithm;
@@ -15,10 +12,10 @@ public class SASearch extends TSPAlgorithm{
 	private double deltaTemperature;
 	private int numOfNextHop;
 	
-	private TwoOptSearch twoOptSearch;
+	private OriginalTwoOptSearch twoOptSearch;
 	
 	public SASearch(double temperature, double deltaTemperature, int limitTrial, int numOfNextHop) {
-		this.twoOptSearch = new TwoOptSearch(limitTrial);
+		this.twoOptSearch = new OriginalTwoOptSearch(limitTrial);
 		this.setSAParameter(temperature, deltaTemperature);
 		this.numOfNextHop = numOfNextHop;
 	}
@@ -47,10 +44,9 @@ public class SASearch extends TSPAlgorithm{
 		//먼저 투옵서치로 패스를 만든다.
 		int[] path = this.twoOptSearch.calculatePath(startPoint);
 
-		//그 후 SA서치로 패스를 만든다.
-		path = this.calculatePath(path);
 		return path;
 	}
+
 
 	@Override
 	public int[] calculatePath(int[] path) {
@@ -88,13 +84,24 @@ public class SASearch extends TSPAlgorithm{
 			int insertTrialScore = PathCheck.getPathCost(insertTrialPath);
 			int inverseTrialScore = PathCheck.getPathCost(inverseTrialPath);
 			int swapTrialScore = PathCheck.getPathCost(swapTrialPath);
-
+			int trialScore = 0;
 			if(swapTrialScore < inverseTrialScore){
-				trialPath = swapTrialPath;
+				if(insertTrialScore < swapTrialScore){
+					trialPath = insertTrialPath;
+					trialScore = insertTrialScore;
+				}else{
+					trialPath = swapTrialPath;
+					trialScore = swapTrialScore;
+				}
 			}else{
-				trialPath = inverseTrialPath;
+				if(insertTrialScore < inverseTrialScore){
+					trialPath = insertTrialPath;
+					trialScore = insertTrialScore;
+				}else{
+					trialPath = inverseTrialPath;
+					trialScore = inverseTrialScore;
+				}
 			}
-			int trialScore = Math.min(swapTrialScore, inverseTrialScore);
 
 			//어떤 랜덤값보다 확률이 크다면
 			double prob = this.getAcceptProbability(bestScore, trialScore);

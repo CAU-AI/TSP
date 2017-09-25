@@ -28,7 +28,7 @@ public class InsertSearch extends TwoOptSearch {
 			//시험 패스를 가져온다.
 			int [] trialPath = Arrays.copyOf(bestPath, bestPath.length);
 
-			insert(trialPath, firstPoint, secondPoint);
+			trialPath = insert(trialPath, firstPoint, secondPoint);
 			//두 랜덤 넘버에 해당하는 패스 순서를 바꾼다
 
 			//시험 패스의 점수를 계산한다.
@@ -48,7 +48,7 @@ public class InsertSearch extends TwoOptSearch {
 	public int[] insert(int[] arr, int firstPoint, int secondPoint){
 		if(firstPoint<secondPoint){
 			int temp = arr[firstPoint];
-			for(int i=firstPoint; i<secondPoint-1;i++){
+			for(int i=firstPoint; i<secondPoint;i++){
 				arr[i] = arr[i+1];
 			}
 			arr[secondPoint] = temp;
@@ -58,7 +58,7 @@ public class InsertSearch extends TwoOptSearch {
 				arr[i] = arr[i+1];
 			}
 			arr[arr.length-1] = arr[0];
-			for(int i=0; i<secondPoint-1;i++){
+			for(int i=0; i<secondPoint;i++){
 				arr[i] = arr[i+1];
 			}
 			arr[secondPoint] = temp;
