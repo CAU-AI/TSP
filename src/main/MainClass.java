@@ -5,9 +5,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Scanner;
 
-import greedy.NearestNeighbor;
 import sa.SASearch;
-import sa.TestSASearch;
 import tspUtil.MapInfo;
 import tspUtil.PathCheck;
 
@@ -41,8 +39,7 @@ public class MainClass {
 			}
 			System.out.print("): ");
 			String mapName = file.list()[scan.nextInt() - 1];
-			//fileName = "./map/" + mapName + "/Sample_" + mapName + ".txt";
-			fileName = "sample.txt";
+			fileName = ".\\map\\" + mapName + "\\Sample_" + mapName + ".txt";
 			mapType = MapInfo.MAP_TYPE_SQUARE;
 		}
 
@@ -56,17 +53,7 @@ public class MainClass {
 		// 2. SASearch 오브젝트 생성
 		SASearch saSearch = makeSASearch(temperatureTrial[3], 0.8, 100000, 3);
 
-
-		//TestSASearch saSearch = new TestSASearch(temperatureTrial[3], 0.8, 100000, 3);
-
-
 		int[] path3 = saSearch.calculatePath(minIndex);
-		//2
-		//NearestNeighbor simpleGreedy = new NearestNeighbor();
-		//int [] path3 = simpleGreedy.calculatePath(minIndex);
-
-		//int [] path3 = saSearch.calculatePath(minPath);
-		//
 		minCost = PathCheck.getPathCost(path3);
 		minPath = Arrays.copyOf(path3, path3.length);
 
@@ -144,7 +131,7 @@ public class MainClass {
 			public void run() {
 				try {
 					beginDate = new Date();
-					Thread.sleep(19999);
+					Thread.sleep(20000);
 					System.out.println("Result : " + minCost);
 
 					Date endDate = new Date();
