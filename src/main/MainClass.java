@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Scanner;
 
+import greedy.NearestNeighbor;
 import sa.SASearch;
 import tspUtil.MapInfo;
 import tspUtil.PathCheck;
@@ -43,57 +44,45 @@ public class MainClass {
 			mapType = MapInfo.MAP_TYPE_SQUARE;
 		}
 
-		int minIndex = 121;
 
 		// 1. 맵 인스턴스 생성
 		MapInfo.setMapInfoInstance(fileName, mapType);
 
-		makeTimeThread(minIndex);
+		int num = MapInfo.getInstance().getNumOfCity();
+		int bestScore = 1000000000;
+		int bestIndex = -1;
+		for(int i = 0 ; i < num ; i ++){
+			NearestNeighbor simpleGreedy = new NearestNeighbor();
+			int [] path = simpleGreedy.calculatePath(i);
+			int score = PathCheck.getPathCost(path);
+			if(bestScore > score){
+				bestScore = score;
+				bestIndex = i;
+			}
+		}
 
-		// 2. SASearch 오브젝트 생성
-		SASearch saSearch = makeSASearch(temperatureTrial[3], 0.8, 100000, 3);
-
-		int[] path3 = saSearch.calculatePath(minIndex);
-
-		minCost = PathCheck.getPathCost(path3);
-		minPath = Arrays.copyOf(path3, path3.length);
-
-		// 3. SA서치 수행
-		playSASearchLoop(saSearch, path3);
-
-
-		//		case 4:
-		//			int populationSize = 100;
-		//			int generationSize = 10000;
-		//
-		//			//Initialize by SA
-		//			Initializer saInitializer = new SAInitalizer(30, 0.8, 10000, 5);
-		//			//Random Initialize
-		//			Initializer randInitializer = new RandomInitializer();
-		//
-		//			Selection ptSelection = new PseudoTournamentSelection(populationSize, 10);
-		//
-		//			Mutation swapMutation = new SwapMutation(0.3);
-		//			//Mutation nscMutation = new NSCMutation(0.3, 4);
-		//
-		//
-		//			Crossover pmxCrossover = new PMXCrossover();
-		//
-		//			MyGASearch myGASearch = new MyGASearch(populationSize , generationSize);
-		//
-		//			myGASearch.setProcess(saInitializer, pmxCrossover, ptSelection, swapMutation);
-		//			//myGASearch.setProcess(randInitializer, pmxCrossover, ptSelection, swapMutation);
-		//
-		//			int [] path4 = myGASearch.calculatePath(0);
-		//			for(int i = 0; i< myGASearch.generationScore.length;i++){
-		//				System.out.println(myGASearch.generationScore[i]);
-		//			}
-		//
-		//			System.out.println("GA: " + PathCheck.getPathCost(path4));
-		//			break;
-		//		}
+		System.out.println("Best point : " + bestIndex);
 
 
+		makeTimeThread(0);
+
+		for(int i = 0 ; i < 100; i ++) {
+			int startIndex = (int)((Math.random() * 100000) % 380);
+
+			System.out.println("Start point : " + startIndex);
+
+			// 2. SASearch 오브젝트 생성
+			SASearch saSearch = makeSASearch(temperatureTrial[2], 0.8, 100000, 3);
+
+			int[] path3 = saSearch.calculatePath(startIndex);
+
+			minCost = PathCheck.getPathCost(path3);
+			minPath = Arrays.copyOf(path3, path3.length);
+
+			// 3. SA서치 수행
+			playSASearchLoop(saSearch, path3);
+
+		}
 	}
 
 	public static void playSASearchLoop(SASearch saSearch, int[] path3){
@@ -181,6 +170,5 @@ public class MainClass {
 			}
 		}).start();
 
-		System.out.println("Start point : " + minIndex);
 	}
 }
