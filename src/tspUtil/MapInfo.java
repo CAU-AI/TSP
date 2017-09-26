@@ -1,5 +1,7 @@
 package tspUtil;
 
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
+
 import java.io.*;
 
 public class MapInfo {
@@ -12,7 +14,8 @@ public class MapInfo {
 	private int numOfCity; // 도시 숫자
 	private int mapType; // Sample 파일의 타입, 1. Square, 2.Triangle
 	private int distanceMap[][]; // 두 도시간의 거리 저장, symmetric matrix
-	private Point points[];
+	private Point points[]; //좌표 리스트
+	private static int[] originalPath; //초기 경로
 	public static int dimension;
 
 	public static void setMapInfoInstance(String filename, int mapType){
@@ -125,6 +128,32 @@ public class MapInfo {
 
 	public int getTwoCityDistance(int firstCityIndex, int secondCityIndex){
 		return this.distanceMap[firstCityIndex][secondCityIndex];
+	}
+
+	public static void makeResultFile(int[] bestPath) {
+		FileWriter fw = null;
+		BufferedWriter writer = null;
+		try {
+			String fileName = "result.txt";
+			fw = new FileWriter(fileName, false);
+			writer = new BufferedWriter(fw);
+
+			for (int i = 0; i < bestPath.length; i++) {
+				writer.write(String.valueOf(bestPath[i]));
+				if (i != bestPath.length - 1) {
+					writer.write("_");
+				}
+			}
+		}catch(IOException e){
+			System.err.println(e);
+		}finally {
+			try{
+				writer.close();
+			}catch (IOException e){
+				System.err.println(e);
+			}
+		}
+
 	}
 	
 	//지도 정보 초기화

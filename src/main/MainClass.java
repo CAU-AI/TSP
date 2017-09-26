@@ -11,8 +11,9 @@ import tspUtil.MapInfo;
 import tspUtil.PathCheck;
 
 public class MainClass {
-	static int minCost = 100000000;
-	static int[] minPath;
+	static int trialCost = 100000000;
+	static int bestCost = 10000000;
+	static int[] trialPath, minPath;
 	static double[] temperatureTrial = {10, 20, 30, 50, 100, 1000};
 	static Date beginDate;
 
@@ -48,6 +49,34 @@ public class MainClass {
 		// 1. 맵 인스턴스 생성
 		MapInfo.setMapInfoInstance(fileName, mapType);
 
+		// 2. 타임 스레드생성
+		makeTimeThread(0);
+
+		// 3. Best Point 생성
+		//int bestIndex = makeBestPoint();
+
+
+		// 4. SASearch 무한 반복
+		for(int i = 0 ; i < 100; i ++) {
+			int startIndex =0;
+
+			startIndex = (int) (Math.random() * MapInfo.dimension - 1);
+			System.out.println("Start point : " + startIndex);
+
+			// 2. SASearch 오브젝트 생성
+			SASearch saSearch = makeSASearch(temperatureTrial[2], 0.8, 100000, 3);
+
+			int[] path3 = saSearch.calculatePath(startIndex); //two-opt greedy path 생성
+			trialPath = Arrays.copyOf(path3, path3.length);
+			trialCost = PathCheck.getPathCost(path3);
+			// 3. SA서치 수행
+			playSASearchLoop(saSearch, path3);
+
+		}
+
+	}
+
+	private static int makeBestPoint(){
 		int num = MapInfo.getInstance().getNumOfCity();
 		int bestScore = 1000000000;
 		int bestIndex = -1;
@@ -60,46 +89,33 @@ public class MainClass {
 				bestIndex = i;
 			}
 		}
-
 		System.out.println("Best point : " + bestIndex);
-
-
-		makeTimeThread(0);
-
-		for(int i = 0 ; i < 100; i ++) {
-			int startIndex = (int)((Math.random() * 100000) % 380);
-
-			System.out.println("Start point : " + startIndex);
-
-			// 2. SASearch 오브젝트 생성
-			SASearch saSearch = makeSASearch(temperatureTrial[2], 0.8, 100000, 3);
-
-			int[] path3 = saSearch.calculatePath(startIndex);
-
-			minCost = PathCheck.getPathCost(path3);
-			minPath = Arrays.copyOf(path3, path3.length);
-
-			// 3. SA서치 수행
-			playSASearchLoop(saSearch, path3);
-
-		}
+		if(bestIndex < 0)
+			bestIndex =0;
+		return bestIndex;
 	}
 
 	public static void playSASearchLoop(SASearch saSearch, int[] path3){
 
 		saSearch.setTemperature(temperatureTrial[2]);
-		path3 = saSearch.calculatePath(minPath);
+		path3 = saSearch.calculatePath(trialPath);
 		int currCost = PathCheck.getPathCost(path3);
-		if (currCost < minCost) {
-			minCost = currCost;
-			minPath = path3;
+		if (currCost < trialCost) {
+			trialCost = currCost;
+			trialPath = path3;
 		}
 
-		pathCheck(path3);
+		//pathCheck(path3);
+
+		// 신기록 경신시
+		if(trialCost < bestCost){
+			bestCost = trialCost;
+			minPath = trialPath;
+		}
 
 		System.out.println("");
-		System.out.println("SA search cost : " + minCost);
-
+		System.out.println("Trial search cost : " + trialCost);
+		System.out.println("Best Cost : " + bestCost);
 
 
 		Date endDate = new Date();
@@ -108,7 +124,7 @@ public class MainClass {
 		long milsec = diff % 1000;
 		long sec = diff / 1000;
 
-		System.out.println("Experiment End : " + sec + "." + milsec + "s");
+		System.out.println("Experiment End : " + sec + "." + milsec + "s \n");
 	}
 
 	public static void pathCheck(int[] path3){
@@ -143,7 +159,7 @@ public class MainClass {
 
 	public static SASearch makeSASearch( double temperatureTrial, double deltaTemperature, int limitTrial, int numOfNextHop){
 		SASearch saSearch = new SASearch(temperatureTrial, 0.8, 100000, 3);
-		System.out.println("SA search: " + minCost);
+		System.out.println("SA search: " + trialCost);
 		return saSearch;
 	}
 
@@ -154,8 +170,8 @@ public class MainClass {
 			public void run() {
 				try {
 					beginDate = new Date();
-					Thread.sleep(20000);
-					System.out.println("Result : " + minCost);
+					Thread.sleep(50000); //여기를 조절해주세요
+					System.out.println("Final Best Cost : " + bestCost);
 
 					Date endDate = new Date();
 					long diff = endDate.getTime() - beginDate.getTime();
@@ -164,6 +180,12 @@ public class MainClass {
 					long sec = diff / 1000;
 
 					System.out.println("Experiment End : " + sec + "." + milsec + "s");
+
+
+					// 5. 결과 파일 생성
+					MapInfo.makeResultFile(minPath);
+
+					System.exit(0);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
