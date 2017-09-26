@@ -66,7 +66,7 @@ public class MapInfo {
 			if (str == null || str.equals(""))
 				break;
 			if(i==5){ //set dimension
-				dimension = Integer.parseInt(str.substring(str.length()-3, str.length()));
+				dimension = Integer.parseInt(str.substring(12, str.length()));
 			}
 		}
 
