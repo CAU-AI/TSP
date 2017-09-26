@@ -9,6 +9,8 @@ import tspUtil.PathCheck;
 
 import java.util.Arrays;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
@@ -37,12 +39,18 @@ public class InsertMethodTest {
 		//시도값은 0
 		int trial = 0;
 
+
+		int equalCount = 0;
 		for(int i=0;i<bestPath.length;i++){
-			for(int j=0;j<bestPath.length;i++){
+			for(int j=0;j<bestPath.length;j++){
 				if(i!=j) {
+					if(bestPath[i] == bestPath[j]){
+						equalCount++;
+					}
 				}
 			}
 		}
+		assertThat(equalCount, is(2));
 
 		//시도할 맥스는 limitTrial
 		while(trial < 100000){
@@ -69,15 +77,17 @@ public class InsertMethodTest {
 			trial++;
 		}
 
+		equalCount = 0;
 		for(int i=0;i<bestPath.length;i++){
-			for(int j=0;j<bestPath.length;i++){
+			for(int j=0;j<bestPath.length;j++){
 				if(i!=j) {
 					if (bestPath[i] == bestPath[j]) {
-						System.out.println("wow");
+						equalCount++;
 					}
 				}
 			}
 		}
+		assertThat(equalCount, is(2));
 	}
 
 	public static SASearch makeSASearch( double temperatureTrial, double deltaTemperature, int limitTrial, int numOfNextHop){
