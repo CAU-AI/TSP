@@ -41,7 +41,7 @@ public class SASearch extends TSPAlgorithm{
 	public int[] calculatePath(int startPoint) {
 		// TODO Auto-generated method stub
 
-		//¸ÕÀú Åõ¿É¼­Ä¡·Î ÆÐ½º¸¦ ¸¸µç´Ù.
+		//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½É¼ï¿½Ä¡ï¿½ï¿½ ï¿½Ð½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½.
 		int[] path = this.twoOptSearch.calculatePath(startPoint);
 
 		return path;
@@ -51,16 +51,19 @@ public class SASearch extends TSPAlgorithm{
 	@Override
 	public int[] calculatePath(int[] path) {
 
-		//ÀÎ¼ö·Î ¹ÞÀº ¼ø¼­¸¦ º¹»çÇÑ´Ù.
+		//ï¿½Î¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ñ´ï¿½.
 		int[] bestPath = Arrays.copyOf(path, path.length);
 
-		//ÃÊ±â°ªÀ¸·Î µé¾î¿Â ÆÐ½ºÀÇ ±æÀÌ¸¦ ÀúÀåÇØµÐ´Ù
+		//ï¿½Ê±â°ªï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ð½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ì¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ØµÐ´ï¿½
 		int bestScore = PathCheck.getPathCost(bestPath);
 
-		//¿Âµµ°¡ 1º¸´Ù Å©´Ù¸é °è¼Ó µ·´Ù
-		//¿Âµµ°¡ 1°ú °°°Å³ª ÀÛ¾ÆÁö¸é ¸ØÃá´Ù
-		while (this.temperature > 1) {
-			//º¹»çÇÑ ÀÎ¼öÀÇ ¼ø¼­¸¦ ÇÑ¹ø ´õ º¹»çÇÑ´Ù.
+		//ï¿½Âµï¿½ï¿½ï¿½ 1ï¿½ï¿½ï¿½ï¿½ Å©ï¿½Ù¸ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+		//ï¿½Âµï¿½ï¿½ï¿½ 1ï¿½ï¿½ ï¿½ï¿½ï¿½Å³ï¿½ ï¿½Û¾ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½
+		float anCount=0;
+
+		double trialTemperature = this.temperature;
+		while (trialTemperature > 1) {
+			//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Î¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ñ¹ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ñ´ï¿½.
 			int[] insertTrialPath = Arrays.copyOf(bestPath, bestPath.length);
 			int[] inverseTrialPath = Arrays.copyOf(bestPath, bestPath.length);
 			int[] swapTrialPath= Arrays.copyOf(bestPath, bestPath.length);
@@ -80,7 +83,7 @@ public class SASearch extends TSPAlgorithm{
 			SwapSearch swapSearch = new SwapSearch();
 			swapTrialPath = swapSearch.calculatePath(trialPath);
 
-			//ÆÐ½ºÀÇ Á¡¼ö¸¦ ÀúÀåÇÑ´Ù.
+			//ï¿½Ð½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ñ´ï¿½.
 			int insertTrialScore = PathCheck.getPathCost(insertTrialPath);
 			int inverseTrialScore = PathCheck.getPathCost(inverseTrialPath);
 			int swapTrialScore = PathCheck.getPathCost(swapTrialPath);
@@ -103,39 +106,42 @@ public class SASearch extends TSPAlgorithm{
 				}
 			}
 
-			//¾î¶² ·£´ý°ªº¸´Ù È®·üÀÌ Å©´Ù¸é
+			//ï¿½î¶² ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½ï¿½ï¿½ Å©ï¿½Ù¸ï¿½
 			double prob = this.getAcceptProbability(bestScore, trialScore);
 			double random = Math.random();
 			if (random < prob) {
-				//½ÃÇè»ï¾Æ º¹»çÇÑ ÆÐ½º¸¦ ÇöÀç ÆÐ½º·Î ÀúÀåÇØ ³õ´Â´Ù.
+				//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ð½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ð½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Â´ï¿½.
 				bestPath = Arrays.copyOf(trialPath, trialPath.length);
 
-				//½ÃÇè»ï¾Æ °è»êÇÑ Á¡¼ö¸¦ ÇöÀç Á¡¼ö·Î ÀúÀåÇØ ³õ´Â´Ù.
+				//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Â´ï¿½.
 				bestScore = trialScore;
 
 				//System.out.println("bestScore : " + bestScore + ", prob : " + (float)prob);
 			}
 
 			// normal function
-			 this.temperature *= deltaTemperature;
+			 //this.temperature *= deltaTemperature;
 
+			trialTemperature = ((1/(1+Math.pow(Math.E, (8*(anCount-0.5)))))) * temperature;
+			anCount+= 0.07f;
+			System.out.println("anCount : " + anCount);
+			System.out.println("temperature : " + trialTemperature);
 			// sigmoid function
-			// this.temperature = ((1/(1+Math.pow(Math.E, (-1*this.temperature)))));
 			// System.out.println("temperature : " +temperature);
 		}
 		return bestPath;
 	}
 
 
-	//È®·üÀ» ±¸ÇÑ´Ù
+	//È®ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ñ´ï¿½
 	private double getAcceptProbability(int bestScore, int trialScore) {
 
-		//ÇöÀç ½ºÄÚ¾î°¡ ´õ Å©´Ù¸é 1À» ¸®ÅÏ
+		//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ú¾î°¡ ï¿½ï¿½ Å©ï¿½Ù¸ï¿½ 1ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 		if (bestScore > trialScore)
 			return 1;
 		else {
 			//return 0;
-			//±×·¸Áö ¾Ê´Ù¸é È®·ü p ¸¦ ½Ä¿¡ ´ëÀÔÇÏ¿© ¸®ÅÏÇÑ´Ù.
+			//ï¿½×·ï¿½ï¿½ï¿½ ï¿½Ê´Ù¸ï¿½ È®ï¿½ï¿½ p ï¿½ï¿½ ï¿½Ä¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ñ´ï¿½.
 			return Math.pow(Math.E, -(trialScore - bestScore) / this.temperature);
 		}
 	}
