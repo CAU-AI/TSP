@@ -13,6 +13,7 @@ public class MapInfo {
 	private int mapType; // Sample 파일의 타입, 1. Square, 2.Triangle
 	private int distanceMap[][]; // 두 도시간의 거리 저장, symmetric matrix
 	private Point points[];
+	public static int dimension;
 
 	public static void setMapInfoInstance(String filename, int mapType){
 		instance = new MapInfo(filename, mapType);
@@ -55,7 +56,7 @@ public class MapInfo {
 		}
 
 		String str = null;
-		int dimension = 0;
+		dimension = 0;
 		for(int i=0;i<8;i++){
 			try {
 				str = reader.readLine();
