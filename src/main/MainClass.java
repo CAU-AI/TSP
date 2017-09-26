@@ -54,6 +54,7 @@ public class MainClass {
 		SASearch saSearch = makeSASearch(temperatureTrial[3], 0.8, 100000, 3);
 
 		int[] path3 = saSearch.calculatePath(minIndex);
+
 		minCost = PathCheck.getPathCost(path3);
 		minPath = Arrays.copyOf(path3, path3.length);
 
@@ -96,19 +97,22 @@ public class MainClass {
 	}
 
 	public static void playSASearchLoop(SASearch saSearch, int[] path3){
-		for(int i = 0 ; i < 100 ; i ++) {
-			float delta = (20 - i) * 0.03f;
-			if (delta < 0.4)
-				delta = 0.4f;
-			saSearch.setTemperature(temperatureTrial[2]);
-			path3 = saSearch.calculatePath(minPath);
-			int currCost = PathCheck.getPathCost(path3);
-			if (currCost < minCost) {
-				minCost = currCost;
-				minPath = path3;
-			}
-			System.out.println("SA search: " + delta + ", cost : " + minCost);
+
+		saSearch.setTemperature(temperatureTrial[2]);
+		path3 = saSearch.calculatePath(minPath);
+		int currCost = PathCheck.getPathCost(path3);
+		if (currCost < minCost) {
+			minCost = currCost;
+			minPath = path3;
 		}
+
+		pathCheck(path3);
+
+		System.out.println("");
+		System.out.println("SA search cost : " + minCost);
+
+
+
 		Date endDate = new Date();
 		long diff = endDate.getTime() - beginDate.getTime();
 
@@ -116,6 +120,36 @@ public class MainClass {
 		long sec = diff / 1000;
 
 		System.out.println("Experiment End : " + sec + "." + milsec + "s");
+	}
+
+	public static void pathCheck(int[] path3){
+		boolean[] pp = new boolean[path3.length];
+
+		System.out.println("");
+		System.out.println("///////////////////////////////////////////////////////////");
+		for(int index = 0 ; index < path3.length ; index ++) {
+			if(pp[path3[index]]){
+				System.out.println("여기 두개 : " + path3[index]);
+			}
+			pp[path3[index]] = true;
+		}
+
+		for(int index = 0 ; index < path3.length; index ++) {
+			if(!pp[index]){
+				System.out.println("없는 번호 : " + index);
+			}
+		}
+
+		System.out.print(path3[0]);
+		for(int index = 1 ; index < path3.length ; index ++) {
+			if(index % 20 == 0)
+				System.out.print("\n");
+			else
+				System.out.print(", ");
+			System.out.print(path3[index]);
+		}
+		System.out.print("\n");
+		System.out.println("///////////////////////////////////////////////////////////");
 	}
 
 	public static SASearch makeSASearch( double temperatureTrial, double deltaTemperature, int limitTrial, int numOfNextHop){
