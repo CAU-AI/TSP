@@ -8,7 +8,7 @@ import tspUtil.TSPAlgorithm;
 
 public class OriginalTwoOptSearch extends TSPAlgorithm{
 
-	protected int limitTrial;
+	public int limitTrial;
 
 	public OriginalTwoOptSearch(){
 		this.limitTrial = 100000;

@@ -61,27 +61,27 @@ public class SASearch extends TSPAlgorithm{
 			int[] insertTrialPath = Arrays.copyOf(bestPath, bestPath.length);
 			int[] inverseTrialPath = Arrays.copyOf(bestPath, bestPath.length);
 			int[] swapTrialPath= Arrays.copyOf(bestPath, bestPath.length);
-			int[] threeOptTrialPath = Arrays.copyOf(bestPath,bestPath.length);
+			//int[] threeOptTrialPath = Arrays.copyOf(bestPath,bestPath.length);
 
 			int[] trialPath = Arrays.copyOf(bestPath, bestPath.length);
 
 
-			InsertSearch insertSearch = new InsertSearch(100000);
+			InsertSearch insertSearch = new InsertSearch(twoOptSearch.limitTrial * 6);
 			insertTrialPath = insertSearch.calculatePath(trialPath);
 
-			InverseSearch inverseSearch = new InverseSearch(10000);
+			InverseSearch inverseSearch = new InverseSearch(twoOptSearch.limitTrial * 4);
 			inverseTrialPath = inverseSearch.calculatePath(trialPath);
 
-			SwapSearch swapSearch = new SwapSearch(10000);
+			SwapSearch swapSearch = new SwapSearch(twoOptSearch.limitTrial * 2);
 			swapTrialPath = swapSearch.calculatePath(trialPath);
 
-			ThreeOptSearch threeOptSearch = new ThreeOptSearch(10000);
-			threeOptTrialPath = threeOptSearch.calculatePath(trialPath);
+			//ThreeOptSearch threeOptSearch = new ThreeOptSearch(twoOptSearch.limitTrial * 3);
+			//threeOptTrialPath = threeOptSearch.calculatePath(trialPath);
 
 			int insertTrialScore = PathCheck.getPathCost(insertTrialPath);
 			int inverseTrialScore = PathCheck.getPathCost(inverseTrialPath);
 			int swapTrialScore = PathCheck.getPathCost(swapTrialPath);
-			int threeOptTrialScore = PathCheck.getPathCost(threeOptTrialPath);
+			//int threeOptTrialScore = PathCheck.getPathCost(threeOptTrialPath);
 			int trialScore = 0;
 			if(swapTrialScore < inverseTrialScore){
 				if(insertTrialScore < swapTrialScore){
@@ -100,26 +100,23 @@ public class SASearch extends TSPAlgorithm{
 					trialScore = inverseTrialScore;
 				}
 			}
-			if(threeOptTrialScore < trialScore){
-				trialPath = threeOptTrialPath;
-				trialScore = threeOptTrialScore;
-			}
 
 			double prob = this.getAcceptProbability(bestScore, trialScore);
 			double random = Math.random();
 			if (random < prob) {
 				bestPath = Arrays.copyOf(trialPath, trialPath.length);
-
 				bestScore = trialScore;
 
 			}
 
 
 			// normal function
-			// trialTemperature *= deltaTemperature;
-
+			//*
+			trialTemperature *= deltaTemperature;
+			/*/
 			trialTemperature = ((1/(1+Math.pow(Math.E, (8*(anCount-0.5)))))) * temperature;
 			anCount+= 0.07f;
+			//*/
 			System.out.println("temperature : " + trialTemperature);
 			// sigmoid function
 			// System.out.println("temperature : " +temperature);

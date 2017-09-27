@@ -68,7 +68,7 @@ public class MainClass {
 			System.out.println("Start point : " + startIndex);
 
 			// 2. SASearch 坷宏璃飘 积己
-			SASearch saSearch = makeSASearch(temperatureTrial[2], 0.8, 100000, 3);
+			SASearch saSearch = makeSASearch(temperatureTrial[2], 0.8, 10000, 3);
 
 			int[] path3 = saSearch.calculatePath(startIndex); //two-opt greedy path 积己
 			trialPath = Arrays.copyOf(path3, path3.length);
@@ -162,7 +162,7 @@ public class MainClass {
 	}
 
 	public static SASearch makeSASearch( double temperatureTrial, double deltaTemperature, int limitTrial, int numOfNextHop){
-		SASearch saSearch = new SASearch(temperatureTrial, 0.8, 100000, 3);
+		SASearch saSearch = new SASearch(temperatureTrial, deltaTemperature, limitTrial, numOfNextHop);
 		System.out.println("SA search: " + trialCost);
 		return saSearch;
 	}
