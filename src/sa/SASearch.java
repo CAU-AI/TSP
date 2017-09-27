@@ -3,7 +3,7 @@ package sa;
 import java.util.Arrays;
 
 import greedy.*;
-import tspUtil.GetTwoRandomNumber;
+import tspUtil.GetRandomNumber;
 import tspUtil.PathCheck;
 import tspUtil.TSPAlgorithm;
 
@@ -41,7 +41,6 @@ public class SASearch extends TSPAlgorithm{
 	public int[] calculatePath(int startPoint) {
 		// TODO Auto-generated method stub
 
-		//???? ???????? ?¬ß??? ?????.
 		int[] path = this.twoOptSearch.calculatePath(startPoint);
 
 		return path;
@@ -51,42 +50,38 @@ public class SASearch extends TSPAlgorithm{
 	@Override
 	public int[] calculatePath(int[] path) {
 
-		//?¥ì??? ???? ?????? ???????.
 		int[] bestPath = Arrays.copyOf(path, path.length);
 
-		//??????? ???? ?¬ß??? ????? ??????¬Õ?
 		int bestScore = PathCheck.getPathCost(bestPath);
 
-		//????? 1???? ???? ??? ????
-		//????? 1?? ????? ??????? ?????
 		float anCount=0;
 
 		double trialTemperature = this.temperature;
 		while (trialTemperature > 1) {
-			//?????? ?¥ì??? ?????? ??? ?? ???????.
 			int[] insertTrialPath = Arrays.copyOf(bestPath, bestPath.length);
 			int[] inverseTrialPath = Arrays.copyOf(bestPath, bestPath.length);
 			int[] swapTrialPath= Arrays.copyOf(bestPath, bestPath.length);
+			int[] threeOptTrialPath = Arrays.copyOf(bestPath,bestPath.length);
+
 			int[] trialPath = Arrays.copyOf(bestPath, bestPath.length);
 
 
-			int[] twoRandNumber = GetTwoRandomNumber.getTwoRandomNumberReal();
-			int firstPoint = twoRandNumber[0];
-			int secondPoint = twoRandNumber[1];
-
-			InsertSearch insertSearch = new InsertSearch();
+			InsertSearch insertSearch = new InsertSearch(100000);
 			insertTrialPath = insertSearch.calculatePath(trialPath);
 
-			InverseSearch inverseSearch = new InverseSearch();
+			InverseSearch inverseSearch = new InverseSearch(10000);
 			inverseTrialPath = inverseSearch.calculatePath(trialPath);
 
-			SwapSearch swapSearch = new SwapSearch();
+			SwapSearch swapSearch = new SwapSearch(10000);
 			swapTrialPath = swapSearch.calculatePath(trialPath);
 
-			//?¬ß??? ?????? ???????.
+			ThreeOptSearch threeOptSearch = new ThreeOptSearch(10000);
+			threeOptTrialPath = threeOptSearch.calculatePath(trialPath);
+
 			int insertTrialScore = PathCheck.getPathCost(insertTrialPath);
 			int inverseTrialScore = PathCheck.getPathCost(inverseTrialPath);
 			int swapTrialScore = PathCheck.getPathCost(swapTrialPath);
+			int threeOptTrialScore = PathCheck.getPathCost(threeOptTrialPath);
 			int trialScore = 0;
 			if(swapTrialScore < inverseTrialScore){
 				if(insertTrialScore < swapTrialScore){
@@ -105,22 +100,23 @@ public class SASearch extends TSPAlgorithm{
 					trialScore = inverseTrialScore;
 				}
 			}
+			if(threeOptTrialScore < trialScore){
+				trialPath = threeOptTrialPath;
+				trialScore = threeOptTrialScore;
+			}
 
-			//?? ?????????? ????? ????
 			double prob = this.getAcceptProbability(bestScore, trialScore);
 			double random = Math.random();
 			if (random < prob) {
-				//?????? ?????? ?¬ß??? ???? ?¬ß??? ?????? ???¢¥?.
 				bestPath = Arrays.copyOf(trialPath, trialPath.length);
 
-				//?????? ????? ?????? ???? ?????? ?????? ???¢¥?.
 				bestScore = trialScore;
 
-				//System.out.println("bestScore : " + bestScore + ", prob : " + (float)prob);
 			}
 
+
 			// normal function
-			 //this.temperature *= deltaTemperature;
+			// trialTemperature *= deltaTemperature;
 
 			trialTemperature = ((1/(1+Math.pow(Math.E, (8*(anCount-0.5)))))) * temperature;
 			anCount+= 0.07f;
@@ -132,15 +128,11 @@ public class SASearch extends TSPAlgorithm{
 	}
 
 
-	//????? ?????
 	private double getAcceptProbability(int bestScore, int trialScore) {
 
-		//???? ????? ?? ???? 1?? ????
 		if (bestScore > trialScore)
 			return 1;
 		else {
-			//return 0;
-			//????? ???? ??? p ?? ?¨¨? ??????? ???????.
 			return Math.pow(Math.E, -(trialScore - bestScore) / this.temperature);
 		}
 	}

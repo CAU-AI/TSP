@@ -1,6 +1,6 @@
 package ga;
 
-import tspUtil.GetTwoRandomNumber;
+import tspUtil.GetRandomNumber;
 import tspUtil.PathCheck;
 import tspUtil.SwapCity;
 
@@ -21,7 +21,7 @@ public class SwapMutation implements Mutation {
 
 		for (int i = 1; i <= mutationSize; i++) {
 
-			int [] twoRandNumber = GetTwoRandomNumber.getTwoRandomNumber();
+			int [] twoRandNumber = GetRandomNumber.getTwoRandomNumber();
 			
 			SwapCity.swapCity(populationList[populationSize - i].path, twoRandNumber[0], twoRandNumber[1]);
 

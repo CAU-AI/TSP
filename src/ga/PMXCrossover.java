@@ -2,7 +2,7 @@ package ga;
 
 import java.util.Arrays;
 
-import tspUtil.GetTwoRandomNumber;
+import tspUtil.GetRandomNumber;
 import tspUtil.PathCheck;
 import tspUtil.SwapCity;
 
@@ -20,7 +20,7 @@ public class PMXCrossover implements Crossover{
 		int [] firstPath = Arrays.copyOf(firstParent.path, firstParent.path.length);
 		int [] secondPath = Arrays.copyOf(secondParent.path, secondParent.path.length);
 		
-		int [] twoRandNumber = GetTwoRandomNumber.getTwoRandomNumber();
+		int [] twoRandNumber = GetRandomNumber.getTwoRandomNumber();
 		
 		int firstPoint = twoRandNumber[0];
 		int secondPoint = twoRandNumber[1];

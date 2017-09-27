@@ -53,14 +53,18 @@ public class MainClass {
 		makeTimeThread(0);
 
 		// 3. Best Point 생성
-		//int bestIndex = makeBestPoint();
+//		int bestIndex = makeBestPoint();
 
 
 		// 4. SASearch 무한 반복
 		for(int i = 0 ; i < 100; i ++) {
+
 			int startIndex =0;
 
 			startIndex = (int) (Math.random() * MapInfo.dimension - 1);
+//			if(i==0)
+//				startIndex = bestIndex;
+
 			System.out.println("Start point : " + startIndex);
 
 			// 2. SASearch 오브젝트 생성
@@ -170,7 +174,7 @@ public class MainClass {
 			public void run() {
 				try {
 					beginDate = new Date();
-					Thread.sleep(50000); //여기를 조절해주세요
+					Thread.sleep(20000); //여기를 조절해주세요
 					System.out.println("Final Best Cost : " + bestCost);
 
 					Date endDate = new Date();

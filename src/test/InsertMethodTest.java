@@ -3,7 +3,7 @@ package test;
 import greedy.InsertSearch;
 import org.junit.Test;
 import sa.SASearch;
-import tspUtil.GetTwoRandomNumber;
+import tspUtil.GetRandomNumber;
 import tspUtil.MapInfo;
 import tspUtil.PathCheck;
 
@@ -23,7 +23,7 @@ public class InsertMethodTest {
 		MapInfo.setMapInfoInstance(fileName, MapInfo.MAP_TYPE_SQUARE);
 
 		SASearch saSearch = makeSASearch(50, 0.8, 100000, 3);
-		InsertSearch insertSearch = new InsertSearch();
+		InsertSearch insertSearch = new InsertSearch(10000);
 
 		int minIndex = 121;
 		int[] path = saSearch.calculatePath(minIndex);
@@ -55,7 +55,7 @@ public class InsertMethodTest {
 		//시도할 맥스는 limitTrial
 		while(trial < 100000){
 			//두 랜덤 넘버를 가져온다
-			int[] twoRandArr = GetTwoRandomNumber.getTwoRandomNumberReal();
+			int[] twoRandArr = GetRandomNumber.getTwoRandomNumberReal();
 			int firstPoint = twoRandArr[0];
 			int secondPoint = twoRandArr[1];
 

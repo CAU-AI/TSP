@@ -1,20 +1,20 @@
 package greedy;
 
-import java.util.Arrays;
-
 import tspUtil.GetRandomNumber;
 import tspUtil.PathCheck;
 import tspUtil.TSPAlgorithm;
 
-public class TwoOptSearch extends TSPAlgorithm{
+import java.util.Arrays;
+
+public class ThreeOptSearch extends TSPAlgorithm{
 
 	protected int limitTrial;
-	
-	public TwoOptSearch(){
-		this.limitTrial = 100000;
+
+	public ThreeOptSearch(){
+		this.limitTrial = 10000;
 	}
-	
-	public TwoOptSearch(int limitTrial){
+
+	public ThreeOptSearch(int limitTrial){
 		this.setTwoOptSearchParameter(limitTrial);
 	}
 	
@@ -41,14 +41,15 @@ public class TwoOptSearch extends TSPAlgorithm{
 		while(trial < this.limitTrial){
 
 			//두 랜덤 넘버를 가져온다
-			int[] twoRandArr = GetRandomNumber.getTwoRandomNumberReal();
-			int firstPoint = twoRandArr[0];
-			int secondPoint = twoRandArr[1];
+			int[] threeRandomArr = GetRandomNumber.getThreeRandomNumberReal();
+			int firstPoint = threeRandomArr[0];
+			int secondPoint = threeRandomArr[1];
+			int thirdPoint = threeRandomArr[2];
 
 			//시험 패스를 가져온다.
 			int [] trialPath = Arrays.copyOf(bestPath, bestPath.length);
 
-			swapPath(trialPath, firstPoint, secondPoint);
+			swapPath(trialPath, firstPoint, secondPoint, thirdPoint);
 			//두 랜덤 넘버에 해당하는 패스 순서를 바꾼다
 
 			//시험 패스의 점수를 계산한다.
@@ -76,16 +77,18 @@ public class TwoOptSearch extends TSPAlgorithm{
 		return path;
 	}
 
-	public int[] swapPath(int [] arr, int firstPoint, int secondPoint){
+	public int[] swapPath(int [] arr, int firstPoint, int secondPoint, int thirdPoint){
 		if(firstPoint < 1 || secondPoint > arr.length-1){
 			System.err.println("2opt.. index error in swapPath func");
 			System.exit(1);
 		}
-		for(int i = 0; i < (secondPoint - firstPoint)/2; i++){
-			int temp = arr[secondPoint - i];
-			arr[secondPoint - i] = arr[firstPoint + i];
-			arr[firstPoint + i] = temp;
-		}
+
+		int temp = arr[firstPoint];
+
+		arr[firstPoint] = arr[secondPoint];
+		arr[secondPoint] = arr[thirdPoint];
+		arr[thirdPoint] = temp;
+
 		return arr;
 	}
 }

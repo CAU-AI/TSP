@@ -2,7 +2,7 @@ package greedy;
 
 import java.util.Arrays;
 
-import tspUtil.GetTwoRandomNumber;
+import tspUtil.GetRandomNumber;
 import tspUtil.PathCheck;
 import tspUtil.TSPAlgorithm;
 
@@ -34,7 +34,7 @@ public class OriginalTwoOptSearch extends TSPAlgorithm{
 
 		while(trial < this.limitTrial){
 
-			int [] twoRandArr = GetTwoRandomNumber.getTwoRandomNumber();
+			int [] twoRandArr = GetRandomNumber.getTwoRandomNumber();
 
 			int firstPoint = twoRandArr[0];
 			int secondPoint = twoRandArr[1];

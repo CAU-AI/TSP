@@ -1,11 +1,15 @@
 package greedy;
 
-import tspUtil.GetTwoRandomNumber;
+import tspUtil.GetRandomNumber;
 import tspUtil.PathCheck;
 
 import java.util.Arrays;
 
 public class InsertSearch extends TwoOptSearch {
+
+	public InsertSearch(int limitTrial){
+		this.setTwoOptSearchParameter(limitTrial);
+	}
 	@Override
 	public int[] calculatePath(int [] path) {
 		// TODO Auto-generated method stub
@@ -21,7 +25,7 @@ public class InsertSearch extends TwoOptSearch {
 		while(trial < this.limitTrial){
 
 			//두 랜덤 넘버를 가져온다
-			int[] twoRandArr = GetTwoRandomNumber.getTwoRandomNumberReal();
+			int[] twoRandArr = GetRandomNumber.getTwoRandomNumberReal();
 			int firstPoint = twoRandArr[0];
 			int secondPoint = twoRandArr[1];
 
