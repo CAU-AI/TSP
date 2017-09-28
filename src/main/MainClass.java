@@ -53,53 +53,32 @@ public class MainClass {
 		makeTimeThread(0);
 
 		// 3. Best Point 생성
-//		int bestIndex = makeBestPoint();
+		//int bestIndex = makeBestPoint();
 
 
 		// 4. SASearch 무한 반복
 		for(int i = 0 ; i < 100; i ++) {
-
 			int startIndex =0;
 
 			startIndex = (int) (Math.random() * MapInfo.dimension - 1);
-//			if(i==0)
-//				startIndex = bestIndex;
+			//if(i==0)
+				//startIndex = bestIndex;
 
 			System.out.println("Start point : " + startIndex);
 
 			// 2. SASearch 오브젝트 생성
-			SASearch saSearch = makeSASearch(temperatureTrial[2], 0.8, 10000, 3);
+			SASearch saSearch = new SASearch(temperatureTrial[2], 0.8, 7000, 3);
 
 			int[] path3 = saSearch.calculatePath(startIndex); //two-opt greedy path 생성
 			trialPath = Arrays.copyOf(path3, path3.length);
 			trialCost = PathCheck.getPathCost(path3);
 			// 3. SA서치 수행
-			playSASearchLoop(saSearch, path3);
-
+			playSASearch(saSearch, path3);
 		}
 
 	}
 
-	private static int makeBestPoint(){
-		int num = MapInfo.getInstance().getNumOfCity();
-		int bestScore = 1000000000;
-		int bestIndex = -1;
-		for(int i = 0 ; i < num ; i ++){
-			NearestNeighbor simpleGreedy = new NearestNeighbor();
-			int [] path = simpleGreedy.calculatePath(i);
-			int score = PathCheck.getPathCost(path);
-			if(bestScore > score){
-				bestScore = score;
-				bestIndex = i;
-			}
-		}
-		System.out.println("Best point : " + bestIndex);
-		if(bestIndex < 0)
-			bestIndex =0;
-		return bestIndex;
-	}
-
-	public static void playSASearchLoop(SASearch saSearch, int[] path3){
+	public static void playSASearch(SASearch saSearch, int[] path3){
 
 		saSearch.setTemperature(temperatureTrial[2]);
 		path3 = saSearch.calculatePath(trialPath);
@@ -161,12 +140,6 @@ public class MainClass {
 		System.out.println("///////////////////////////////////////////////////////////");
 	}
 
-	public static SASearch makeSASearch( double temperatureTrial, double deltaTemperature, int limitTrial, int numOfNextHop){
-		SASearch saSearch = new SASearch(temperatureTrial, deltaTemperature, limitTrial, numOfNextHop);
-		System.out.println("SA search: " + trialCost);
-		return saSearch;
-	}
-
 	public static void makeTimeThread(int minIndex){
 
 		new Thread(new Runnable() {
@@ -187,7 +160,7 @@ public class MainClass {
 
 
 					// 5. 결과 파일 생성
-					MapInfo.makeResultFile(minPath);
+					MapInfo.makeResultFile(bestCost, minPath);
 
 					System.exit(0);
 				} catch (InterruptedException e) {

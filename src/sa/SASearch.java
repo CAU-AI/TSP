@@ -3,6 +3,9 @@ package sa;
 import java.util.Arrays;
 
 import greedy.*;
+import temperature.NormalFunction;
+import temperature.SigmoidFunction;
+import temperature.TemperatureFunction;
 import tspUtil.GetRandomNumber;
 import tspUtil.PathCheck;
 import tspUtil.TSPAlgorithm;
@@ -10,14 +13,18 @@ import tspUtil.TSPAlgorithm;
 public class SASearch extends TSPAlgorithm{
 	private double temperature;
 	private double deltaTemperature;
-	private int numOfNextHop;
-	
+	private int temperatureFunction;
+	private boolean isTest = false;
 	private OriginalTwoOptSearch twoOptSearch;
 	
-	public SASearch(double temperature, double deltaTemperature, int limitTrial, int numOfNextHop) {
+	public SASearch(double temperature, double deltaTemperature, int limitTrial, int temperatureFunction) {
 		this.twoOptSearch = new OriginalTwoOptSearch(limitTrial);
 		this.setSAParameter(temperature, deltaTemperature);
-		this.numOfNextHop = numOfNextHop;
+		this.temperatureFunction = temperatureFunction;
+	}
+
+	public void setIsTest(boolean isTest){
+		this.isTest = isTest;
 	}
 
 	public void setTemperature(double temperature){
@@ -57,6 +64,7 @@ public class SASearch extends TSPAlgorithm{
 		float anCount=0;
 
 		double trialTemperature = this.temperature;
+		int count =0;
 		while (trialTemperature > 1) {
 			int[] insertTrialPath = Arrays.copyOf(bestPath, bestPath.length);
 			int[] inverseTrialPath = Arrays.copyOf(bestPath, bestPath.length);
@@ -72,7 +80,7 @@ public class SASearch extends TSPAlgorithm{
 			InverseSearch inverseSearch = new InverseSearch(twoOptSearch.limitTrial * 4);
 			inverseTrialPath = inverseSearch.calculatePath(trialPath);
 
-			SwapSearch swapSearch = new SwapSearch(twoOptSearch.limitTrial * 2);
+			SwapSearch swapSearch = new SwapSearch(twoOptSearch.limitTrial * 1);
 			swapTrialPath = swapSearch.calculatePath(trialPath);
 
 			//ThreeOptSearch threeOptSearch = new ThreeOptSearch(twoOptSearch.limitTrial * 3);
@@ -109,21 +117,19 @@ public class SASearch extends TSPAlgorithm{
 
 			}
 
+			if(this.temperatureFunction == TemperatureFunction.NORMAL){
+				trialTemperature = NormalFunction.updateTrialTemperature(trialTemperature, deltaTemperature);
+			}else if(temperatureFunction == TemperatureFunction.SIGMOID){
+				trialTemperature = SigmoidFunction.updateTrialTemperature(temperature, 0.07f, count++);
+			}
 
-			// normal function
-			//*
-			trialTemperature *= deltaTemperature;
-			/*/
-			trialTemperature = ((1/(1+Math.pow(Math.E, (8*(anCount-0.5)))))) * temperature;
-			anCount+= 0.07f;
-			//*/
-			System.out.println("temperature : " + trialTemperature);
+			if(!isTest)
+				System.out.println("temperature : " + trialTemperature);
 			// sigmoid function
 			// System.out.println("temperature : " +temperature);
 		}
 		return bestPath;
 	}
-
 
 	private double getAcceptProbability(int bestScore, int trialScore) {
 

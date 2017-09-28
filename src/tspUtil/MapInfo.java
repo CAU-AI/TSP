@@ -130,18 +130,19 @@ public class MapInfo {
 		return this.distanceMap[firstCityIndex][secondCityIndex];
 	}
 
-	public static void makeResultFile(int[] bestPath) {
+	public static void makeResultFile(int bestCost, int[] bestPath) {
 		FileWriter fw = null;
 		BufferedWriter writer = null;
 		try {
 			String fileName = "result.txt";
 			fw = new FileWriter(fileName, false);
 			writer = new BufferedWriter(fw);
-
+			writer.write(String.valueOf(bestCost));
+			writer.write(", bestPath : ");
 			for (int i = 0; i < bestPath.length; i++) {
 				writer.write(String.valueOf(bestPath[i]));
 				if (i != bestPath.length - 1) {
-					writer.write("_");
+					writer.write("_tab_");
 				}
 			}
 		}catch(IOException e){
