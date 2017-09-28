@@ -19,8 +19,6 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 public class TemperatureFunctionTest {
-	static String normal08 = "normal08";
-	static String normal07 = "normal07";
 	static int sum = 0;
 	static int limitTrial = 15000;
 	static int trialCost = 100000000;
@@ -29,7 +27,7 @@ public class TemperatureFunctionTest {
 	static double[] temperatureTrial = {10, 20, 30, 50, 100, 1000};
 	static Date beginTime;
 	static long diff;
-	static final int loopCount=1;
+	static final int loopCount=30;
 
 	private void makeMapInfo(){
 		makeXit1083();
@@ -37,11 +35,11 @@ public class TemperatureFunctionTest {
 
 	@Before
 	public void setUp(){
-
 		initialize();
 	}
 
 	public void initialize(){
+		beginTime = new Date();
 		sum=0;
 		bestCost = 1000000;
 	}
@@ -68,8 +66,8 @@ public class TemperatureFunctionTest {
 
 	@Test
 	public void testNormal09(){
+		beginTime = new Date();
 		makeMapInfo();
-
 		testNormal(loopCount, 0.9f);
 	}
 
@@ -91,9 +89,11 @@ public class TemperatureFunctionTest {
 	public void testSigmoid(){
 		beginTime = new Date();
 		makeMapInfo();
-//		for(int i = 0 ; i < loopCount; i ++) {
-			int startIndex =BestIndexSearch.makeBestIndex();
-
+		for(int i = 0 ; i < loopCount; i ++) {
+			int startIndex = 0;
+			if(i==0)
+				startIndex =BestIndexSearch.makeBestIndex();
+			else
 			startIndex = (int) (Math.random() * MapInfo.dimension - 1);
 			//if(i==0)
 			//startIndex = bestIndex;
@@ -108,16 +108,18 @@ public class TemperatureFunctionTest {
 			trialCost = PathCheck.getPathCost(path3);
 			// 3. SA서치 수행
 			playSASearch(saSearch, path3);
-//		}
+		}
 		printResult("sigmoid()");
 
 	}
 
 	public void testNormal(int loopCount, double deltaTemperature){
-//		for(int i = 0 ; i < loopCount; i ++) {
-			int startIndex = BestIndexSearch.makeBestIndex();
-
-			startIndex = (int) (Math.random() * MapInfo.dimension - 1);
+		for(int i = 0 ; i < loopCount; i ++) {
+			int startIndex = 0;
+			if(i==0)
+				startIndex =BestIndexSearch.makeBestIndex();
+			else
+				startIndex = (int) (Math.random() * MapInfo.dimension - 1);
 			//if(i==0)
 			//startIndex = bestIndex;
 
@@ -130,7 +132,7 @@ public class TemperatureFunctionTest {
 			trialCost = PathCheck.getPathCost(path3);
 			// 3. SA서치 수행
 			playSASearch(saSearch, path3);
-//		}
+		}
 		printResult("normal("+deltaTemperature+")");
 	}
 

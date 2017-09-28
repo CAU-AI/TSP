@@ -32,7 +32,7 @@ public class NearestNeighbor extends TSPAlgorithm {
 		path_new[this.numOfCity] = startPoint;
 
 		path_new = this.calculatePath_new(path_new);
-		System.out.println("origin : " + PathCheck.getPathCost(path) + ", new : " + PathCheck.getPathCost(path_new));
+		//System.out.println("origin : " + PathCheck.getPathCost(path) + ", new : " + PathCheck.getPathCost(path_new));
 
 		return path;
 	}

@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.Scanner;
 
 import greedy.NearestNeighbor;
+import sa.BestIndexSearch;
 import sa.SASearch;
 import tspUtil.MapInfo;
 import tspUtil.PathCheck;
@@ -59,8 +60,10 @@ public class MainClass {
 		// 4. SASearch 무한 반복
 		for(int i = 0 ; i < 100; i ++) {
 			int startIndex =0;
-
-			startIndex = (int) (Math.random() * MapInfo.dimension - 1);
+			if(i==0)
+				startIndex = BestIndexSearch.makeBestIndex();
+			else
+				startIndex = (int) (Math.random() * MapInfo.dimension - 1);
 			//if(i==0)
 				//startIndex = bestIndex;
 
