@@ -174,7 +174,7 @@ public class MainClass {
 			public void run() {
 				try {
 					beginDate = new Date();
-					Thread.sleep(20000); //여기를 조절해주세요
+					Thread.sleep(30000); //여기를 조절해주세요
 					System.out.println("Final Best Cost : " + bestCost);
 
 					Date endDate = new Date();
