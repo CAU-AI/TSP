@@ -3,9 +3,12 @@ package tspUtil;
 import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MapInfo {
 	//Singleton pattern
+	public static final int MAP_TYPE_TEST = 3;
 	public static final int MAP_TYPE_SQUARE = 1;
 	public static final int OPEN_TYPE_NEW_FILE = 1;
 	public static final int OPEN_TYPE_LOAD_TEMPLATE = 2;
@@ -14,7 +17,7 @@ public class MapInfo {
 	private int numOfCity; // 도시 숫자
 	private int mapType; // Sample 파일의 타입, 1. Square, 2.Triangle
 	private int distanceMap[][]; // 두 도시간의 거리 저장, symmetric matrix
-	private Point points[]; //좌표 리스트
+	private List<Point> points; //좌표 리스트
 	private static int[] originalPath; //초기 경로
 	public static int dimension;
 
@@ -34,7 +37,7 @@ public class MapInfo {
 
 	public void setMapType(int mapType, String filename){
 		this.mapType = mapType;
-		if(mapType == MAP_TYPE_SQUARE){
+		if(mapType == MAP_TYPE_SQUARE || mapType == MAP_TYPE_TEST){
 			convertFileToTriangleType(filename);
 		}
 	}
@@ -60,38 +63,42 @@ public class MapInfo {
 
 		String str = null;
 		dimension = 0;
-		for(int i=0;i<8;i++){
-			try {
-				str = reader.readLine();
-			} catch (IOException e) {
-				System.err.println("File read error");
-				System.exit(1);
-			}
-			if (str == null || str.equals(""))
-				break;
-			if(i==5){ //set dimension
-				dimension = Integer.parseInt(str.substring(12, str.length()));
+		if(mapType == MAP_TYPE_SQUARE) {
+			for (int i = 0; i < 8; i++) {
+				try {
+					str = reader.readLine();
+				} catch (IOException e) {
+					System.err.println("File read error");
+					System.exit(1);
+				}
+				if (str == null || str.equals(""))
+					break;
+				if (i == 5) { //set dimension
+					dimension = Integer.parseInt(str.substring(12, str.length()));
+				}
 			}
 		}
 
-		points = new Point[dimension];
-		for(int i=0;i<dimension;i++){
-			try {
-				str = reader.readLine();
+		points = new ArrayList<Point>();
+		try {
+			int i=0;
+			while((str = reader.readLine()) != null){
 				String[] splitedStr = str.split(" ");
-				points[i] = new Point(Integer.parseInt(splitedStr[1]), Integer.parseInt(splitedStr[2]));
+				points.add(new Point(Integer.parseInt(splitedStr[1]), Integer.parseInt(splitedStr[2])));
 				for(int j=0; j<i;j++){
-					int distance = (int)Math.hypot(points[j].x - points[i].x, points[j].y - points[i].y); // 점 사이의 거리
+					int distance = (int)Math.hypot(points.get(j).x - points.get(i).x, points.get(j).y - points.get(i).y); // 점 사이의 거리
 					writer.write(String.valueOf(distance));
 					writer.write(" ");
 				}
 				writer.write(String.valueOf(0) + " "); //자기 자신과의 거리
 				writer.newLine();
-			} catch (IOException e) {
-				System.err.println("File read error");
-				e.printStackTrace();
-				System.exit(1);
+				i++;
 			}
+			dimension = i;
+		} catch (IOException e) {
+			System.err.println("File read error");
+			e.printStackTrace();
+			System.exit(1);
 		}
 
 		//스트림 닫기
@@ -163,7 +170,7 @@ public class MapInfo {
 	private void setDistanceMap(String filename) {
 		this.distanceMap = new int[this.numOfCity][this.numOfCity];
 
-		if(mapType == 1){
+		if(mapType == 1 || mapType==3){
 			StringBuffer sb = new StringBuffer(filename);
 			filename = sb.insert(filename.length()-4, "_tri").toString(); //TRI용 변환 파일 사용
 		}
@@ -210,7 +217,7 @@ public class MapInfo {
 		this.numOfCity = 0;
 
 		LineNumberReader reader = null;
-		if(mapType == 1){
+		if(mapType == 1 || mapType==3){
 			StringBuffer sb = new StringBuffer(filename);
 			filename = sb.insert(filename.length()-4, "_tri").toString(); //TRI용 변환 파일 사용
 		}
