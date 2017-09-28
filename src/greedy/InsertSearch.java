@@ -33,6 +33,9 @@ public class InsertSearch extends TwoOptSearch {
 			//¹Ù²ãº»´Ù
 			trialPath = insert(trialPath, rand[0], rand[1]);
 
+
+			PathCheck.checkChangeNearNodesLocal(trialPath, rand[0]);
+			PathCheck.checkChangeNearNodesLocal(trialPath, rand[1]);
 			PathCheck.checkChangeNearNodes(trialPath, rand[0]);
 			PathCheck.checkChangeNearNodes(trialPath, rand[1]);
 
