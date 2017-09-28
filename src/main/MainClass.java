@@ -62,16 +62,27 @@ public class MainClass {
 				startIndex = BestIndexSearch.makeBestIndex();
 			else
 				startIndex = (int) (Math.random() * MapInfo.dimension - 1);
-			//if(i==0)
-				//startIndex = bestIndex;
-
-			System.out.println("Start point : " + startIndex);
 
 			// 2. SASearch 오브젝트 생성
 			double deltaTemperature = MapInfo.dimension >800 ? 0.7f : 0.8f;
 			int limitTrial = 15000;
 			limitTrial *= 1083/MapInfo.dimension;
 			SASearch saSearch = new SASearch(30, deltaTemperature, limitTrial, 0);
+
+			int[] path3 = saSearch.calculatePath(startIndex); //two-opt greedy path 생성
+			trialPath = Arrays.copyOf(path3, path3.length);
+			trialCost = PathCheck.getPathCost(path3);
+			// 3. SA서치 수행
+			playSASearch(saSearch, path3);
+		}
+
+		for(int i = 0 ; i < 50; i ++) {
+			int startIndex = (int) (Math.random() * MapInfo.dimension - 1);
+
+			// 2. SASearch 오브젝트 생성
+			int limitTrial = 15000;
+			limitTrial *= 1083/MapInfo.dimension;
+			SASearch saSearch = new SASearch(30, 0.9f, limitTrial, 0);
 
 			int[] path3 = saSearch.calculatePath(startIndex); //two-opt greedy path 생성
 			trialPath = Arrays.copyOf(path3, path3.length);

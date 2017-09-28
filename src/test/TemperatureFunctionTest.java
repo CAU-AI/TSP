@@ -30,7 +30,7 @@ public class TemperatureFunctionTest {
 	static final int loopCount=5;
 
 	private void makeMapInfo(){
-		makeXqf131();
+		makePhd984();
 	}
 
 	@Before
@@ -60,6 +60,12 @@ public class TemperatureFunctionTest {
 
 	private static void makeXql662(){
 		String fileName = ".\\map\\xql662\\Sample_xql662.txt";
+		MapInfo.setMapInfoInstance(fileName, MapInfo.MAP_TYPE_SQUARE);
+		System.out.println("data name : " +fileName + "-----------------------------");
+	}
+
+	private static void makePhd984(){
+		String fileName = ".\\map\\phd984\\Sample_phd984.txt";
 		MapInfo.setMapInfoInstance(fileName, MapInfo.MAP_TYPE_SQUARE);
 		System.out.println("data name : " +fileName + "-----------------------------");
 	}
