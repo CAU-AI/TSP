@@ -33,6 +33,9 @@ public class InsertSearch extends TwoOptSearch {
 			//바꿔본다
 			trialPath = insert(trialPath, rand[0], rand[1]);
 
+			PathCheck.checkChangeNearNodes(trialPath, rand[0]);
+			PathCheck.checkChangeNearNodes(trialPath, rand[1]);
+
 			//시험 패스의 점수를 계산한다.
 			int trialScore = PathCheck.getPathCost(trialPath);
 

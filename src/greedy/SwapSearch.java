@@ -45,6 +45,7 @@ public class SwapSearch extends TwoOptSearch {
 			//한번 더 바꿔본다
 			trialPath2 = swap(trialPath2, rand[0], rand[1]);
 
+
 			//시험 패스의 점수를 계산한다.
 			int trialScore2 = PathCheck.getPathCost(trialPath2);
 
@@ -62,6 +63,11 @@ public class SwapSearch extends TwoOptSearch {
 				bestPath = Arrays.copyOf(trialPath2, trialPath2.length);
 				bestScore = trialScore2;
 			}
+
+
+			PathCheck.checkChangeNearNodes(bestPath, rand[0]);
+			PathCheck.checkChangeNearNodes(bestPath, rand[1]);
+
 			trial++;
 		}
 		return bestPath;
