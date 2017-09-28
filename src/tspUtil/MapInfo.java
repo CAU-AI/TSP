@@ -59,7 +59,8 @@ public class MapInfo {
 		}
 
 		String str = null;
-		dimension = 0;
+		dimension = 100000;
+		/*
 		for(int i=0;i<8;i++){
 			try {
 				str = reader.readLine();
@@ -73,11 +74,14 @@ public class MapInfo {
 				dimension = Integer.parseInt(str.substring(12, str.length()));
 			}
 		}
-
+		//*/
+		int i;
 		points = new Point[dimension];
-		for(int i=0;i<dimension;i++){
+		for( i = 0; i < dimension; i ++ ){
 			try {
 				str = reader.readLine();
+				if(str == null)
+					break;
 				String[] splitedStr = str.split(" ");
 				points[i] = new Point(Integer.parseInt(splitedStr[1]), Integer.parseInt(splitedStr[2]));
 				for(int j=0; j<i;j++){
@@ -93,6 +97,8 @@ public class MapInfo {
 				System.exit(1);
 			}
 		}
+
+		dimension = i + 1;
 
 		//½ºÆ®¸² ´Ý±â
 		if(reader!=null){

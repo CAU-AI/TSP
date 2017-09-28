@@ -11,6 +11,8 @@ public class BestIndexSearch {
 		int bestScore = 1000000000;
 		int bestIndex = -1;
 		int count = (int)((float)10000/(float)num);
+		if(num <= count) count = num - 1;
+		//System.out.println("count : " + count);
 		for(int i = 0 ; i < count ; i ++){
 			int rand = (int)(Math.random() * num);
 			if(bNum[rand]){

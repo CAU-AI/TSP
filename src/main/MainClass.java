@@ -64,7 +64,7 @@ public class MainClass {
 				startIndex = (int) (Math.random() * MapInfo.dimension - 1);
 
 			// 2. SASearch 오브젝트 생성
-			double deltaTemperature = MapInfo.dimension >800 ? 0.7f : 0.8f;
+			double deltaTemperature = MapInfo.dimension < 1000 ? (MapInfo.dimension < 800? (MapInfo.dimension < 500? 0.8f : 0.75f) : 0.7f ) : 0.65f;
 			int limitTrial = 15000;
 			limitTrial *= 1083/MapInfo.dimension;
 			SASearch saSearch = new SASearch(30, deltaTemperature, limitTrial, 0);
