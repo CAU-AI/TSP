@@ -30,8 +30,7 @@ public class TemperatureFunctionTest {
 	static final int loopCount=5;
 
 	private void makeMapInfo(){
-		makeXql662();
-		limitTrial *= 1000/MapInfo.dimension;
+		makeXqf131();
 	}
 
 	@Before
@@ -41,10 +40,15 @@ public class TemperatureFunctionTest {
 
 	public void initialize(){
 		limitTrial = 15000;
-
 		beginTime = new Date();
 		sum=0;
 		bestCost = 1000000;
+	}
+
+	private static void makeXqf131(){
+		String fileName = ".\\map\\xqf131\\Sample_xqf131.txt";
+		MapInfo.setMapInfoInstance(fileName, MapInfo.MAP_TYPE_SQUARE);
+		System.out.println("data name : " +fileName + "-----------------------------");
 	}
 
 
@@ -78,6 +82,13 @@ public class TemperatureFunctionTest {
 //		beginTime = new Date();
 //		makeMapInfo();
 //		testNormal(loopCount, 0.9f, 100);
+//	}
+//
+//	@Test
+//	public void testNormal08_09(){
+//		beginTime =new Date();
+//		makeMapInfo();
+//		testTwoNormal(loopCount, 0.8f, 0.9f);
 //	}
 
 	@Test
@@ -147,7 +158,45 @@ public class TemperatureFunctionTest {
 
 	}
 
-	public void testNormal(int loopCount, double deltaTemperature, double trialTemperature){
+	private void testTwoNormal(int loopCount, double deltaTemperature1, double deltaTemperature2){
+		for(int i = 0 ; i < 30; i ++) {
+			int startIndex = 0;
+			if(i==0)
+				startIndex =BestIndexSearch.makeBestIndex();
+			else
+				startIndex = (int) (Math.random() * MapInfo.dimension - 1);
+			//if(i==0)
+			//startIndex = bestIndex;
+
+			// 2. SASearch 오브젝트 생성
+			SASearch saSearch = new SASearch(30, deltaTemperature1, limitTrial, TemperatureFunction.NORMAL);
+			saSearch.setIsTest(true);
+
+			int[] path3 = saSearch.calculatePath(startIndex); //two-opt greedy path 생성
+			trialPath = Arrays.copyOf(path3, path3.length);
+			trialCost = PathCheck.getPathCost(path3);
+			// 3. SA서치 수행
+			playSASearch(saSearch, path3);
+		}
+
+		for(int i = 0 ; i < 10; i ++) {
+			int startIndex = (int) (Math.random() * MapInfo.dimension - 1);
+			//if(i==0)
+			//startIndex = bestIndex;
+
+			// 2. SASearch 오브젝트 생성
+			SASearch saSearch = new SASearch(30, deltaTemperature2, limitTrial, TemperatureFunction.NORMAL);
+			saSearch.setIsTest(true);
+
+			trialCost = PathCheck.getPathCost(trialPath);
+			// 3. SA서치 수행
+			playSASearch(saSearch, minPath);
+		}
+
+		printResult("normal("+deltaTemperature1+", " + deltaTemperature2 + ")");
+	}
+
+	private void testNormal(int loopCount, double deltaTemperature, double trialTemperature){
 		for(int i = 0 ; i < loopCount; i ++) {
 			int startIndex = 0;
 			if(i==0)
@@ -167,13 +216,23 @@ public class TemperatureFunctionTest {
 			// 3. SA서치 수행
 			playSASearch(saSearch, path3);
 		}
+		int equalCount = 0;
+		for(int i=0;i<minPath.length;i++){
+			for(int j=0;j<minPath.length;j++){
+				if(i!=j) {
+					if(minPath[i] == minPath[j]){
+						equalCount++;
+					}
+				}
+			}
+		}
+		assertThat(equalCount, is(2));
+		System.out.println(minPath.length);
 		printResult("normal("+deltaTemperature+")");
 	}
 
 
 	private static void playSASearch(SASearch saSearch, int[] path3){
-
-		saSearch.setTemperature(temperatureTrial[2]);
 		path3 = saSearch.calculatePath(trialPath);
 		int currCost = PathCheck.getPathCost(path3);
 		if (currCost < trialCost) {

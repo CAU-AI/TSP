@@ -53,11 +53,9 @@ public class MainClass {
 		// 2. 타임 스레드생성
 		makeTimeThread(0);
 
-		// 3. Best Point 생성
-		//int bestIndex = makeBestPoint();
 
 
-		// 4. SASearch 무한 반복
+		// 3. SASearch 무한 반복
 		for(int i = 0 ; i < 100; i ++) {
 			int startIndex =0;
 			if(i==0)
@@ -72,8 +70,8 @@ public class MainClass {
 			// 2. SASearch 오브젝트 생성
 			double deltaTemperature = MapInfo.dimension >800 ? 0.7f : 0.8f;
 			int limitTrial = 15000;
-			limitTrial *= MapInfo.dimension/1000;
-			SASearch saSearch = new SASearch(100, deltaTemperature, limitTrial, 0);
+			limitTrial *= 1083/MapInfo.dimension;
+			SASearch saSearch = new SASearch(30, deltaTemperature, limitTrial, 0);
 
 			int[] path3 = saSearch.calculatePath(startIndex); //two-opt greedy path 생성
 			trialPath = Arrays.copyOf(path3, path3.length);
@@ -124,6 +122,7 @@ public class MainClass {
 				try {
 					beginDate = new Date();
 					Thread.sleep(30000); //여기를 조절해주세요
+
 					System.out.println("Final Best Cost : " + bestCost);
 
 					Date endDate = new Date();

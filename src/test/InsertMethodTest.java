@@ -18,7 +18,7 @@ public class InsertMethodTest {
 	static int minCost = 100000000;
 	@Test
 	public void test(){
-		String fileName = ".\\map\\bcl380\\Sample_bcl380.txt";
+		String fileName = ".\\map\\xqf131\\Sample_xqf131.txt";
 		// 1. 맵 인스턴스 생성
 		MapInfo.setMapInfoInstance(fileName, MapInfo.MAP_TYPE_SQUARE);
 

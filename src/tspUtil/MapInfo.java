@@ -142,7 +142,7 @@ public class MapInfo {
 			for (int i = 0; i < bestPath.length; i++) {
 				writer.write(String.valueOf(bestPath[i]));
 				if (i != bestPath.length - 1) {
-					writer.write("_tab_");
+					writer.write("\t");
 				}
 			}
 		}catch(IOException e){
