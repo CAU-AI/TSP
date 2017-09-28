@@ -27,10 +27,11 @@ public class TemperatureFunctionTest {
 	static double[] temperatureTrial = {10, 20, 30, 50, 100, 1000};
 	static Date beginTime;
 	static long diff;
-	static final int loopCount=30;
+	static final int loopCount=5;
 
 	private void makeMapInfo(){
-		makeXit1083();
+		makeXql662();
+		limitTrial *= 1000/MapInfo.dimension;
 	}
 
 	@Before
@@ -39,6 +40,8 @@ public class TemperatureFunctionTest {
 	}
 
 	public void initialize(){
+		limitTrial = 15000;
+
 		beginTime = new Date();
 		sum=0;
 		bestCost = 1000000;
@@ -63,44 +66,75 @@ public class TemperatureFunctionTest {
 		System.out.println("data name : " +fileName + "-----------------------------");
 	}
 
+//	@Test
+//	public void testNormal09_temp30(){
+//		beginTime = new Date();
+//		makeMapInfo();
+//		testNormal(loopCount, 0.9f, 30);
+//	}
+//
+//	@Test
+//	public void testNormal09_temp50(){
+//		beginTime = new Date();
+//		makeMapInfo();
+//		testNormal(loopCount, 0.9f, 100);
+//	}
 
 	@Test
-	public void testNormal09(){
+	public void testNormal08_temp30(){
 		beginTime = new Date();
 		makeMapInfo();
-		testNormal(loopCount, 0.9f);
+		testNormal(loopCount, 0.8f, 30);
 	}
 
 	@Test
-	public void testNormal08(){
+	public void testNormal08_temp50(){
 		beginTime = new Date();
 		makeMapInfo();
-		testNormal(loopCount, 0.8f);
+		testNormal(loopCount, 0.8f, 100);
+	}
+
+
+	@Test
+	public void testNormal07_temp30(){
+		beginTime = new Date();
+		makeMapInfo();
+		testNormal(loopCount,0.7f, 30);
 	}
 
 	@Test
-	public void testNormal07(){
+	public void testNormal07_temp50(){
 		beginTime = new Date();
 		makeMapInfo();
-		testNormal(loopCount,0.7f);
+		testNormal(loopCount,0.7f, 100);
 	}
 
 	@Test
-	public void testSigmoid(){
+	public void testSigmoid_temp30(){
 		beginTime = new Date();
 		makeMapInfo();
+		testSigmoid(30);
+	}
+
+	@Test
+	public void testSigmoid_temp50(){
+		beginTime = new Date();
+		makeMapInfo();
+		testSigmoid(100);
+	}
+
+	private void testSigmoid(double trialTemperature){
+
 		for(int i = 0 ; i < loopCount; i ++) {
 			int startIndex = 0;
 			if(i==0)
 				startIndex =BestIndexSearch.makeBestIndex();
 			else
-			startIndex = (int) (Math.random() * MapInfo.dimension - 1);
-			//if(i==0)
-			//startIndex = bestIndex;
+				startIndex = (int) (Math.random() * MapInfo.dimension - 1);
 
 
 			// 2. SASearch 坷宏璃飘 积己
-			SASearch saSearch =  new SASearch(30, 0.9, limitTrial, TemperatureFunction.SIGMOID);
+			SASearch saSearch =  new SASearch(trialTemperature, 0.9, limitTrial, TemperatureFunction.SIGMOID);
 			saSearch.setIsTest(true);
 
 			int[] path3 = saSearch.calculatePath(startIndex); //two-opt greedy path 积己
@@ -113,7 +147,7 @@ public class TemperatureFunctionTest {
 
 	}
 
-	public void testNormal(int loopCount, double deltaTemperature){
+	public void testNormal(int loopCount, double deltaTemperature, double trialTemperature){
 		for(int i = 0 ; i < loopCount; i ++) {
 			int startIndex = 0;
 			if(i==0)
@@ -124,7 +158,7 @@ public class TemperatureFunctionTest {
 			//startIndex = bestIndex;
 
 			// 2. SASearch 坷宏璃飘 积己
-			SASearch saSearch = new SASearch(30, deltaTemperature, limitTrial, TemperatureFunction.NORMAL);
+			SASearch saSearch = new SASearch(trialTemperature, deltaTemperature, limitTrial, TemperatureFunction.NORMAL);
 			saSearch.setIsTest(true);
 
 			int[] path3 = saSearch.calculatePath(startIndex); //two-opt greedy path 积己

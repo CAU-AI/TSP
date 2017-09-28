@@ -70,7 +70,10 @@ public class MainClass {
 			System.out.println("Start point : " + startIndex);
 
 			// 2. SASearch 오브젝트 생성
-			SASearch saSearch = new SASearch(temperatureTrial[2], 0.8, 7000, 0);
+			double deltaTemperature = MapInfo.dimension >800 ? 0.7f : 0.8f;
+			int limitTrial = 15000;
+			limitTrial *= MapInfo.dimension/1000;
+			SASearch saSearch = new SASearch(100, deltaTemperature, limitTrial, 0);
 
 			int[] path3 = saSearch.calculatePath(startIndex); //two-opt greedy path 생성
 			trialPath = Arrays.copyOf(path3, path3.length);
@@ -111,36 +114,6 @@ public class MainClass {
 		long sec = diff / 1000;
 
 		System.out.println("Experiment End : " + sec + "." + milsec + "s \n");
-	}
-
-	public static void pathCheck(int[] path3){
-		boolean[] pp = new boolean[path3.length];
-
-		System.out.println("");
-		System.out.println("///////////////////////////////////////////////////////////");
-		for(int index = 0 ; index < path3.length ; index ++) {
-			if(pp[path3[index]]){
-				System.out.println("여기 두개 : " + path3[index]);
-			}
-			pp[path3[index]] = true;
-		}
-
-		for(int index = 0 ; index < path3.length; index ++) {
-			if(!pp[index]){
-				System.out.println("없는 번호 : " + index);
-			}
-		}
-
-		System.out.print(path3[0]);
-		for(int index = 1 ; index < path3.length ; index ++) {
-			if(index % 20 == 0)
-				System.out.print("\n");
-			else
-				System.out.print(", ");
-			System.out.print(path3[index]);
-		}
-		System.out.print("\n");
-		System.out.println("///////////////////////////////////////////////////////////");
 	}
 
 	public static void makeTimeThread(int minIndex){
