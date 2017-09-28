@@ -70,7 +70,7 @@ public class MainClass {
 			System.out.println("Start point : " + startIndex);
 
 			// 2. SASearch 坷宏璃飘 积己
-			SASearch saSearch = new SASearch(temperatureTrial[2], 0.8, 7000, 3);
+			SASearch saSearch = new SASearch(temperatureTrial[2], 0.8, 7000, 0);
 
 			int[] path3 = saSearch.calculatePath(startIndex); //two-opt greedy path 积己
 			trialPath = Arrays.copyOf(path3, path3.length);

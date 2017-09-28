@@ -123,8 +123,8 @@ public class SASearch extends TSPAlgorithm{
 				trialTemperature = SigmoidFunction.updateTrialTemperature(temperature, 0.07f, count++);
 			}
 
-			if(!isTest)
-				System.out.println("temperature : " + trialTemperature);
+			//if(!isTest)
+				//System.out.println("temperature : " + trialTemperature);
 			// sigmoid function
 			// System.out.println("temperature : " +temperature);
 		}
