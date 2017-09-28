@@ -28,7 +28,7 @@ public class MainClass {
 
 		String fileName = null;
 		if (openType == MapInfo.OPEN_TYPE_NEW_FILE) {
-			System.out.print("Enter Map Type (1. Square, 2. Triangle) : ");
+			System.out.print("Enter Map Type (1. Square, 2. Triangle, 3. TestDemo) : ");
 			mapType = scan.nextInt();
 			System.out.print("Enter Map name (Usually Sample.txt): ");
 			fileName = scan.next();

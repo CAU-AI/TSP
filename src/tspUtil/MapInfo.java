@@ -17,7 +17,7 @@ public class MapInfo {
 	private int numOfCity; // 도시 숫자
 	private int mapType; // Sample 파일의 타입, 1. Square, 2.Triangle
 	private int distanceMap[][]; // 두 도시간의 거리 저장, symmetric matrix
-	private List<Point> points; //좌표 리스트
+	private Point[] points; //좌표 리스트
 	private static int[] originalPath; //초기 경로
 	public static int dimension;
 
@@ -62,7 +62,7 @@ public class MapInfo {
 		}
 
 		String str = null;
-		dimension = 0;
+		dimension = 100000;
 		if(mapType == MAP_TYPE_SQUARE) {
 			for (int i = 0; i < 8; i++) {
 				try {
@@ -79,20 +79,22 @@ public class MapInfo {
 			}
 		}
 
-		points = new ArrayList<Point>();
+		int i=0;
+		points = new Point[dimension];
 		try {
-			int i=0;
-			while((str = reader.readLine()) != null){
+			for(;i<dimension;i++){
+				str = reader.readLine();
+				if(str == null)
+					break;
 				String[] splitedStr = str.split(" ");
-				points.add(new Point(Integer.parseInt(splitedStr[1]), Integer.parseInt(splitedStr[2])));
+				points[i] = new Point(Integer.parseInt(splitedStr[1]), Integer.parseInt(splitedStr[2]));
 				for(int j=0; j<i;j++){
-					int distance = (int)Math.hypot(points.get(j).x - points.get(i).x, points.get(j).y - points.get(i).y); // 점 사이의 거리
+					int distance = (int)Math.hypot(points[j].x - points[i].x, points[j].y - points[i].y); // 점 사이의 거리
 					writer.write(String.valueOf(distance));
 					writer.write(" ");
 				}
 				writer.write(String.valueOf(0) + " "); //자기 자신과의 거리
 				writer.newLine();
-				i++;
 			}
 			dimension = i;
 		} catch (IOException e) {
@@ -170,7 +172,7 @@ public class MapInfo {
 	private void setDistanceMap(String filename) {
 		this.distanceMap = new int[this.numOfCity][this.numOfCity];
 
-		if(mapType == 1 || mapType==3){
+		if(mapType == MAP_TYPE_SQUARE || mapType==MAP_TYPE_TEST){
 			StringBuffer sb = new StringBuffer(filename);
 			filename = sb.insert(filename.length()-4, "_tri").toString(); //TRI용 변환 파일 사용
 		}
@@ -217,7 +219,7 @@ public class MapInfo {
 		this.numOfCity = 0;
 
 		LineNumberReader reader = null;
-		if(mapType == 1 || mapType==3){
+		if(mapType == MAP_TYPE_TEST || mapType==MAP_TYPE_SQUARE){
 			StringBuffer sb = new StringBuffer(filename);
 			filename = sb.insert(filename.length()-4, "_tri").toString(); //TRI용 변환 파일 사용
 		}

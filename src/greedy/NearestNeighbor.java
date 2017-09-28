@@ -19,7 +19,6 @@ public class NearestNeighbor extends TSPAlgorithm {
 	public int[] calculatePath(int startPoint) {
 		// TODO Auto-generated method stub
 		int[] path = new int[this.numOfCity + 1];
-
 		path[0] = startPoint;
 		path[this.numOfCity] = startPoint;
 
