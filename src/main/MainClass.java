@@ -47,32 +47,54 @@ public class MainClass {
 		// 2. 타임 스레드생성
 		makeTimeThread(0);
 
+//
+//		GAElement[] ga = new GAElement[4];
+//
+//		// 3. SASearch 로 GA 4개 찾기
+//		for(int i = 0 ; i < 4; i ++) {
+//			int startIndex = 0;
+//
+//			// 2. SASearch 오브젝트 생성
+//			int limitTrial = 1000;
+//			limitTrial *= 1083/MapInfo.dimension;
+//			SASearch saSearch = new SASearch(30, 0.8f, limitTrial, 0);
+//
+//			ga[i] = new GAElement();
+//
+//			//two-opt greedy path 생성
+//			ga[i].path = saSearch.calculatePath(startIndex);
+//			ga[i].cost = PathCheck.getPathCost(ga[i].path);
+//		}
 
-		GAElement[] ga = new GAElement[4];
+		int populationSize = 100;
+		int generationSize = 10000;
 
-		// 3. SASearch 로 GA 4개 찾기
-		for(int i = 0 ; i < 4; i ++) {
-			int startIndex = 0;
+		//Initialize by SA
+		Initializer saInitializer = new SAInitalizer(30, 0.8, 10, 1);
+		//Random Initialize
+		Initializer randInitializer = new RandomInitializer();
 
-			// 2. SASearch 오브젝트 생성
-			int limitTrial = 1000;
-			limitTrial *= 1083/MapInfo.dimension;
-			SASearch saSearch = new SASearch(30, 0.8f, limitTrial, 0);
+		Selection ptSelection = new PseudoTournamentSelection(populationSize, 10);
 
-			// 3. SA서치 수행
-			ga[i] = playSASearch(saSearch, startIndex);
+		Mutation swapMutation = new SwapMutation(0.3);
+		//Mutation nscMutation = new NSCMutation(0.3, 4);
+
+
+		Crossover pmxCrossover = new PMXCrossover();
+
+		MyGASearch myGASearch = new MyGASearch(populationSize , generationSize);
+
+		myGASearch.setProcess(saInitializer, pmxCrossover, ptSelection, swapMutation);
+		//myGASearch.setProcess(randInitializer, pmxCrossover, ptSelection, swapMutation);
+
+		int [] path4 = myGASearch.calculatePath(0);
+		for(int i = 0; i< myGASearch.generationScore.length;i++){
+			System.out.println(myGASearch.generationScore[i]);
 		}
+
+		System.out.println("GA: " + PathCheck.getPathCost(path4));
 	}
 
-	public static GAElement playSASearch(SASearch saSearch, int startIndex){
-		GAElement ret = new GAElement();
-
-		//two-opt greedy path 생성
-		ret.path = saSearch.calculatePath(startIndex);
-		ret.cost = PathCheck.getPathCost(ret.path);
-
-		return ret;
-	}
 
 	public static void makeTimeThread(int minIndex){
 
@@ -81,7 +103,7 @@ public class MainClass {
 			public void run() {
 				try {
 					beginDate = new Date();
-					Thread.sleep(30000); //여기를 조절해주세요
+					Thread.sleep(3000000); //여기를 조절해주세요
 
 					System.out.println("Final Best Cost : ");
 
