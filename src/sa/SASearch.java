@@ -27,9 +27,6 @@ public class SASearch extends TSPAlgorithm{
 		this.isTest = isTest;
 	}
 
-	public void setTemperature(double temperature){
-		this.temperature = temperature;
-	}
 
 	public void setSAParameter(double temperature, double deltaTemperature) {
 		if (temperature <= 0) {

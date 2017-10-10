@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Scanner;
 
+import ga.*;
 import greedy.NearestNeighbor;
 import sa.BestIndexSearch;
 import sa.SASearch;
@@ -12,9 +13,6 @@ import tspUtil.MapInfo;
 import tspUtil.PathCheck;
 
 public class MainClass {
-	static int trialCost = 100000000;
-	static int bestCost = 10000000;
-	static int[] trialPath, minPath;
 	static double[] temperatureTrial = {10, 20, 30, 50, 100, 1000};
 	static Date beginDate;
 
@@ -54,75 +52,31 @@ public class MainClass {
 		makeTimeThread(0);
 
 
+		GAElement[] ga = new GAElement[4];
 
-		// 3. SASearch 무한 반복
-		for(int i = 0 ; i < 100; i ++) {
-			int startIndex =0;
-			if(i==0)
-				startIndex = BestIndexSearch.makeBestIndex();
-			else
-				startIndex = (int) (Math.random() * MapInfo.dimension - 1);
+		// 3. SASearch 로 GA 4개 찾기
+		for(int i = 0 ; i < 4; i ++) {
+			int startIndex = 0;
 
 			// 2. SASearch 오브젝트 생성
-			double deltaTemperature = MapInfo.dimension >800 ? 0.7f : 0.8f;
-			int limitTrial = 15000;
+			int limitTrial = 1000;
 			limitTrial *= 1083/MapInfo.dimension;
-			SASearch saSearch = new SASearch(30, deltaTemperature, limitTrial, 0);
+			SASearch saSearch = new SASearch(30, 0.8f, limitTrial, 0);
 
-			int[] path3 = saSearch.calculatePath(startIndex); //two-opt greedy path 생성
-			trialPath = Arrays.copyOf(path3, path3.length);
-			trialCost = PathCheck.getPathCost(path3);
 			// 3. SA서치 수행
-			playSASearch(saSearch, path3);
+			ga[i] = playSASearch(saSearch, startIndex);
 		}
-
-		for(int i = 0 ; i < 50; i ++) {
-			int startIndex = (int) (Math.random() * MapInfo.dimension - 1);
-
-			// 2. SASearch 오브젝트 생성
-			int limitTrial = 15000;
-			limitTrial *= 1083/MapInfo.dimension;
-			SASearch saSearch = new SASearch(30, 0.9f, limitTrial, 0);
-
-			int[] path3 = saSearch.calculatePath(startIndex); //two-opt greedy path 생성
-			trialPath = Arrays.copyOf(path3, path3.length);
-			trialCost = PathCheck.getPathCost(path3);
-			// 3. SA서치 수행
-			playSASearch(saSearch, path3);
-		}
-
 	}
 
-	public static void playSASearch(SASearch saSearch, int[] path3){
+	public static GAElement playSASearch(SASearch saSearch, int startIndex){
+		GAElement ret = new GAElement();
 
-		saSearch.setTemperature(temperatureTrial[2]);
-		path3 = saSearch.calculatePath(trialPath);
-		int currCost = PathCheck.getPathCost(path3);
-		if (currCost < trialCost) {
-			trialCost = currCost;
-			trialPath = path3;
-		}
+		//two-opt greedy path 생성
+		ret.path = saSearch.calculatePath(startIndex);
+		ret.path = saSearch.calculatePath(ret.path);
+		ret.cost = PathCheck.getPathCost(ret.path);
 
-		//pathCheck(path3);
-
-		// 신기록 경신시
-		if(trialCost < bestCost){
-			bestCost = trialCost;
-			minPath = trialPath;
-		}
-
-		System.out.println("");
-		System.out.println("Trial search cost : " + trialCost);
-		System.out.println("Best Cost : " + bestCost);
-
-
-		Date endDate = new Date();
-		long diff = endDate.getTime() - beginDate.getTime();
-
-		long milsec = diff % 1000;
-		long sec = diff / 1000;
-
-		System.out.println("Experiment End : " + sec + "." + milsec + "s \n");
+		return ret;
 	}
 
 	public static void makeTimeThread(int minIndex){
@@ -134,7 +88,7 @@ public class MainClass {
 					beginDate = new Date();
 					Thread.sleep(30000); //여기를 조절해주세요
 
-					System.out.println("Final Best Cost : " + bestCost);
+					System.out.println("Final Best Cost : ");
 
 					Date endDate = new Date();
 					long diff = endDate.getTime() - beginDate.getTime();
@@ -146,7 +100,7 @@ public class MainClass {
 
 
 					// 5. 결과 파일 생성
-					MapInfo.makeResultFile(bestCost, minPath);
+					//MapInfo.makeResultFile(bestCost, minPath);
 
 					System.exit(0);
 				} catch (InterruptedException e) {
