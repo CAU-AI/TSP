@@ -47,6 +47,7 @@ public class SASearch extends TSPAlgorithm{
 
 		int[] path = this.twoOptSearch.calculatePath(startPoint);
 
+		path = this.calculatePath(path);
 		return path;
 	}
 

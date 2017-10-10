@@ -1,19 +1,15 @@
 package main;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.Scanner;
 
 import ga.*;
-import greedy.NearestNeighbor;
-import sa.BestIndexSearch;
 import sa.SASearch;
 import tspUtil.MapInfo;
 import tspUtil.PathCheck;
 
 public class MainClass {
-	static double[] temperatureTrial = {10, 20, 30, 50, 100, 1000};
 	static Date beginDate;
 
 
@@ -73,7 +69,6 @@ public class MainClass {
 
 		//two-opt greedy path »ý¼º
 		ret.path = saSearch.calculatePath(startIndex);
-		ret.path = saSearch.calculatePath(ret.path);
 		ret.cost = PathCheck.getPathCost(ret.path);
 
 		return ret;
