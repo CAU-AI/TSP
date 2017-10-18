@@ -8,7 +8,7 @@ public class GAElementComparator implements Comparator<GAElement>{
 	public int compare(GAElement o1, GAElement o2) {
 		// TODO Auto-generated method stub
 		
-		return o1.cost < o2.cost ? -1 :(o1.cost == o2.cost ? 0: 1);
+		return o1.getCost() < o2.getCost() ? -1 :(o1.getCost() == o2.getCost() ? 0: 1);
 	}
 	
 }

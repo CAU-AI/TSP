@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.Scanner;
 
 import ga.*;
-import sa.SASearch;
 import tspUtil.MapInfo;
 import tspUtil.PathCheck;
 
@@ -66,33 +65,31 @@ public class MainClass {
 //			ga[i].cost = PathCheck.getPathCost(ga[i].path);
 //		}
 
-		int populationSize = 100;
-		int generationSize = 10000;
+		int populationSize = 10;
+		int generationSize = 1000;
 
 		//Initialize by SA
-		Initializer saInitializer = new SAInitalizer(30, 0.8, 10, 1);
-		//Random Initialize
-		Initializer randInitializer = new RandomInitializer();
+		Initializer saInitializer = new SAInitalizer(30, 0.8, 1000, 1);
 
-		Selection ptSelection = new PseudoTournamentSelection(populationSize, 10);
+		//Selection ptSelection = new PseudoTournamentSelection(populationSize, 10);
+		Selection ptSelection = new RouletteSelection();
 
 		Mutation swapMutation = new SwapMutation(0.3);
 		//Mutation nscMutation = new NSCMutation(0.3, 4);
-
 
 		Crossover pmxCrossover = new PMXCrossover();
 
 		MyGASearch myGASearch = new MyGASearch(populationSize , generationSize);
 
 		myGASearch.setProcess(saInitializer, pmxCrossover, ptSelection, swapMutation);
-		//myGASearch.setProcess(randInitializer, pmxCrossover, ptSelection, swapMutation);
 
-		int [] path4 = myGASearch.calculatePath(0);
+		int [] path = myGASearch.calculatePath(0);
 		for(int i = 0; i< myGASearch.generationScore.length;i++){
-			System.out.println(myGASearch.generationScore[i]);
+			System.out.println("GA[" + i + "] : " + myGASearch.generationScore[i]);
 		}
 
-		System.out.println("GA: " + PathCheck.getPathCost(path4));
+		System.out.println("GA: " + myGASearch.generationScore[0]);
+		System.out.println("GA: ddd");
 	}
 
 

@@ -9,7 +9,7 @@ public abstract class GASearch extends TSPAlgorithm {
 	protected GAElement[] populationList;
 	
 	protected Initializer initializer;
-	protected Selection	selection;
+	protected Selection selection;
 	protected Mutation mutation;
 	protected Crossover crossover;
 	

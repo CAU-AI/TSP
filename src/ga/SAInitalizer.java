@@ -28,11 +28,11 @@ public class SAInitalizer implements Initializer{
 		Random gen = new Random();
 		GAElement[] populationList = new GAElement[populationSize];
 		for(int i = 0; i < populationSize; i++){
-			int randTrail = (int)( this.limitTrial * gen.nextFloat());
+			int randTrail = (int)( this.limitTrial * (gen.nextFloat() * 0.5f + 0.5f));
 			SASearch sa = new SASearch(this.temperature, this.deltaTemperature, randTrail, coolingFunction);
 			populationList[i] = new GAElement();
-			populationList[i].path = sa.calculatePath(RandomPath.getRandomPath(startCity));
-			populationList[i].cost = PathCheck.getPathCost(populationList[i].path);
+			populationList[i].init(sa.calculatePath(RandomPath.getRandomPath(startCity)));
+			System.out.println("cost : " + populationList[i].getCost());
 		}
 		return populationList;
 	}

@@ -12,8 +12,7 @@ public class RandomInitializer implements Initializer{
 		GAElement[] populationList = new GAElement[populationSize];
 		for(int i = 0; i < populationSize; i++){
 			populationList[i] = new GAElement();
-			populationList[i].path = RandomPath.getRandomPath(startCity);
-			populationList[i].cost = PathCheck.getPathCost(populationList[i].path);
+			populationList[i].init(RandomPath.getRandomPath(startCity));
 		}
 		return populationList;
 	}

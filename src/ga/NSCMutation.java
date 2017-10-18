@@ -27,9 +27,9 @@ public class NSCMutation implements Mutation {
 			int secondPoint = firstPoint + (int)(Math.random()*1000) % (neighborSize);
 			
 			
-			swift(populationList[populationSize - i].path, firstPoint, secondPoint);
+			swift(populationList[populationSize - i].getPath(), firstPoint, secondPoint);
 
-			populationList[populationSize - i].cost = PathCheck.getPathCost(populationList[populationSize - i].path);
+			populationList[populationSize - i].init();
 		}
 	}
 	

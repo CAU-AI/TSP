@@ -56,4 +56,9 @@ public class PseudoTournamentSelection implements Selection{
         }
         this.secondParent = min_idx;
 	}
+
+    @Override
+    public void setInputList(GAElement[] inputList) {
+        
+    }
 }

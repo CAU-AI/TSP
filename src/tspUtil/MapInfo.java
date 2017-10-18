@@ -73,7 +73,7 @@ public class MapInfo {
 				}
 				if (str == null || str.equals(""))
 					break;
-				if (i == 5) { //set dimension
+				if (i == 5) { //init dimension
 					dimension = Integer.parseInt(str.substring(12, str.length()));
 				}
 			}

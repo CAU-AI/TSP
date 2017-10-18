@@ -17,8 +17,8 @@ public class PMXCrossover implements Crossover{
 		child[0] = new GAElement();
 		child[1] = new GAElement();
 		
-		int [] firstPath = Arrays.copyOf(firstParent.path, firstParent.path.length);
-		int [] secondPath = Arrays.copyOf(secondParent.path, secondParent.path.length);
+		int [] firstPath = Arrays.copyOf(firstParent.getPath(), firstParent.getPath().length);
+		int [] secondPath = Arrays.copyOf(secondParent.getPath(), secondParent.getPath().length);
 		
 		int [] twoRandNumber = GetRandomNumber.getTwoRandomNumber();
 		
@@ -26,17 +26,15 @@ public class PMXCrossover implements Crossover{
 		int secondPoint = twoRandNumber[1];
 		
 		for(int i = firstPoint; i <= secondPoint; i++){
-			int idx1 = this.getIndexOfCity(firstPath, secondParent.path[i]);
+			int idx1 = this.getIndexOfCity(firstPath, secondParent.getPath()[i]);
 			SwapCity.swapCity(firstPath, i, idx1);
 			
-			int idx2 = this.getIndexOfCity(secondPath, firstParent.path[i]);
+			int idx2 = this.getIndexOfCity(secondPath, firstParent.getPath()[i]);
 			SwapCity.swapCity(secondPath, i, idx2);
 		}
-		
-		child[0].path = firstPath;
-		child[0].cost = PathCheck.getPathCost(child[0].path);
-		child[1].path = secondPath;
-		child[1].cost = PathCheck.getPathCost(child[1].path);
+
+		child[0].init(firstPath);
+		child[1].init(secondPath);
 		
 		return child;
 	}
