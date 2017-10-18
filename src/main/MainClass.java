@@ -36,7 +36,7 @@ public class MainClass {
 			}
 			System.out.print("): ");
 			String mapName = file.list()[scan.nextInt() - 1];
-			fileName = ".\\map\\" + mapName + "\\Sample_" + mapName + ".txt";
+			fileName = "./map/" + mapName + "/Sample_" + mapName + ".txt";
 			mapType = MapInfo.MAP_TYPE_SQUARE;
 		}
 
@@ -76,15 +76,17 @@ public class MainClass {
 
 		Selection ptSelection = new PseudoTournamentSelection(populationSize, 10);
 
-		Mutation swapMutation = new SwapMutation(0.3);
+		//Mutation inversionMutation = new InversionMutation(0.3);
+		Mutation insertMutation = new InsertMutation(0.3);
 		//Mutation nscMutation = new NSCMutation(0.3, 4);
-
+		//Mutation swapMutation = new SwapMutation(0.3);
 
 		Crossover pmxCrossover = new PMXCrossover();
 
 		MyGASearch myGASearch = new MyGASearch(populationSize , generationSize);
 
-		myGASearch.setProcess(saInitializer, pmxCrossover, ptSelection, swapMutation);
+		myGASearch.setProcess(saInitializer, pmxCrossover, ptSelection, insertMutation);
+		//myGASearch.setProcess(saInitializer, pmxCrossover, ptSelection, inversionMutation);
 		//myGASearch.setProcess(randInitializer, pmxCrossover, ptSelection, swapMutation);
 
 		int [] path4 = myGASearch.calculatePath(0);
