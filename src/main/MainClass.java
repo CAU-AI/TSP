@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.Scanner;
 
 import ga.*;
+import sa.BestIndexSearch;
 import sa.SASearch;
 import tspUtil.MapInfo;
 import tspUtil.PathCheck;
@@ -44,32 +45,45 @@ public class MainClass {
 		System.out.print("Choose Search Method (1.SA , 2.GA) : ");
 		int searchMethod = scan.nextInt();
 
+		// 1. 타임 스레드생성
+		makeTimeThread(0);
 
-		// 1. 맵 인스턴스 생성
+		// 2. 맵 인스턴스 생성
 		MapInfo.setMapInfoInstance(fileName, mapType);
 
 		System.out.println("맵 생성완료");
 
-		// 2. 타임 스레드생성
-		makeTimeThread(0);
 
 		switch(searchMethod){
 		case 1: {
+			int numOfCity = MapInfo.getInstance().getNumOfCity();
+
+			int trial = (int)((100000f)/(numOfCity-200));
+
+			System.out.println("SA trial : " + trial);
+
+			//int bIndex = BestIndexSearch.makeBestIndex();
+			//System.out.println("BestIndexSearch Over");
+
 			while (true) {
-				SASearch saSearch = new SASearch(30, 0.8f, 5000, 1);
+				SASearch saSearch = new SASearch(30, 0.8f, trial, 1);
 				int[] path = saSearch.calculatePath(0);
 				int cost = PathCheck.getPathCost(path);
 				System.out.println("SA Cost : " + cost);
 			}
 		}
 			case 2: {
-				int populationSize = 10;
+				int populationSize = 4;
 				int generationSize = 5000000;
 
 				int numOfCity = MapInfo.getInstance().getNumOfCity();
 
+				int trial = (int)((100000f)/(numOfCity-500));
+
+				System.out.println("SA trial : " + trial);
+
 				//Initialize by SA
-				Initializer saInitializer = new SAInitalizer(30, 0.8, 30, 1);
+				Initializer saInitializer = new SAInitalizer(30, 0.8, 1, 1);
 
 				//Selection ptSelection = new PseudoTournamentSelection(populationSize, 10);
 				Selection ptSelection = new RouletteSelection();
@@ -79,7 +93,7 @@ public class MainClass {
 				Mutation swapMutation = new SwapMutation(0.3);
 				Mutation inversionMutation = new InversionMutation(0.3);
 				Mutation insertMutation = new InsertMutation(0.3);
-				Mutation saMutation = new SAMutation(0.3f, 30, 0.8f, 1, 1);
+				Mutation saMutation = new SAMutation(0.6f, 30, 0.8f, 1, 1);
 
 				mutations[0] = swapMutation;
 				mutations[1] = inversionMutation;
@@ -93,7 +107,9 @@ public class MainClass {
 
 				myGASearch.setProcess(saInitializer, orderedCrossover, ptSelection, mutations);
 
-				int[] path = myGASearch.calculatePath(0);
+				int bIndex = BestIndexSearch.makeBestIndex();
+				System.out.println("BestIndexSearch Over");
+				int[] path = myGASearch.calculatePath(bIndex);
 
 				System.out.println("");
 				System.out.println("GA: " + PathCheck.getPathCost(path));

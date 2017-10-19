@@ -44,9 +44,7 @@ public class SASearch extends TSPAlgorithm{
 	@Override
 	public int[] calculatePath(int startPoint) {
 		// TODO Auto-generated method stub
-
 		int[] path = this.twoOptSearch.calculatePath(startPoint);
-
 		path = this.calculatePath(path);
 		return path;
 	}
@@ -63,6 +61,9 @@ public class SASearch extends TSPAlgorithm{
 
 		double trialTemperature = this.temperature;
 		int count =0;
+
+
+		System.err.println("startTemp");
 		while (trialTemperature > 1) {
 			int[] insertTrialPath;
 			int[] inverseTrialPath;
