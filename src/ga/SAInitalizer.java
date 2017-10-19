@@ -34,6 +34,8 @@ public class SAInitalizer implements Initializer{
 			populationList[i].init(sa.calculatePath(RandomPath.getRandomPath(startCity)));
 			System.out.println("cost : " + populationList[i].getCost());
 		}
+
+
 		return populationList;
 	}
 	

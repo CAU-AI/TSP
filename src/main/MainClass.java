@@ -73,9 +73,10 @@ public class MainClass {
 				int populationSize = 10;
 				int generationSize = 5000000;
 
+				int numOfCity = MapInfo.getInstance().getNumOfCity();
 
 				//Initialize by SA
-				Initializer saInitializer = new SAInitalizer(30, 0.8, 100, 1);
+				Initializer saInitializer = new SAInitalizer(30, 0.8, 30, 1);
 
 				//Selection ptSelection = new PseudoTournamentSelection(populationSize, 10);
 				Selection ptSelection = new RouletteSelection();
@@ -85,7 +86,7 @@ public class MainClass {
 				Mutation swapMutation = new SwapMutation(0.3);
 				Mutation inversionMutation = new InversionMutation(0.3);
 				Mutation insertMutation = new InsertMutation(0.3);
-				Mutation saMutation = new SAMutation(0.5f, 30, 0.8f, 100, 1);
+				Mutation saMutation = new SAMutation(0.3f, 30, 0.8f, 1, 1);
 
 				mutations[0] = swapMutation;
 				mutations[1] = inversionMutation;
