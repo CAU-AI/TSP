@@ -64,9 +64,9 @@ public class SASearch extends TSPAlgorithm{
 		double trialTemperature = this.temperature;
 		int count =0;
 		while (trialTemperature > 1) {
-			int[] insertTrialPath = Arrays.copyOf(bestPath, bestPath.length);
-			int[] inverseTrialPath = Arrays.copyOf(bestPath, bestPath.length);
-			int[] swapTrialPath= Arrays.copyOf(bestPath, bestPath.length);
+			int[] insertTrialPath;
+			int[] inverseTrialPath;
+			int[] swapTrialPath;
 			//int[] threeOptTrialPath = Arrays.copyOf(bestPath,bestPath.length);
 
 			int[] trialPath = Arrays.copyOf(bestPath, bestPath.length);

@@ -10,7 +10,7 @@ public abstract class GASearch extends TSPAlgorithm {
 	
 	protected Initializer initializer;
 	protected Selection selection;
-	protected Mutation mutation;
+	protected Mutation[] mutation;
 	protected Crossover crossover;
 	
 	
@@ -28,7 +28,7 @@ public abstract class GASearch extends TSPAlgorithm {
 		this.crossover = crossover;
 	}
 	
-	public void setMutation(Mutation mutation){
+	public void setMutation(Mutation[] mutation){
 		this.mutation = mutation;
 	}
 	public void setInitializer(Initializer initializer){
@@ -39,7 +39,7 @@ public abstract class GASearch extends TSPAlgorithm {
 		this.selection = selection;
 	}
 	
-	public void setProcess(Initializer initializer, Crossover crossover, Selection selection, Mutation mutation){
+	public void setProcess(Initializer initializer, Crossover crossover, Selection selection, Mutation[] mutation){
 		this.initializer = initializer;
 		this.crossover = crossover;
 		this.selection = selection;
