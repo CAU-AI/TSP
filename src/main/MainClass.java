@@ -9,10 +9,14 @@ import sa.BestIndexSearch;
 import sa.SASearch;
 import tspUtil.MapInfo;
 import tspUtil.PathCheck;
+import tspUtil.RandomPath;
 
 public class MainClass {
 	static Date beginDate;
 
+
+	public static int[] minPath;
+	public static int bestCost;
 
 	public static void main(String[] args) {
 		Scanner scan = new Scanner(System.in);
@@ -58,18 +62,23 @@ public class MainClass {
 		case 1: {
 			int numOfCity = MapInfo.getInstance().getNumOfCity();
 
-			int trial = (int)((100000f)/(numOfCity-200));
+			int trial = (int)((5000000f)/(numOfCity-200));
 
 			System.out.println("SA trial : " + trial);
 
 			//int bIndex = BestIndexSearch.makeBestIndex();
 			//System.out.println("BestIndexSearch Over");
-
+			bestCost = Integer.MAX_VALUE;
 			while (true) {
 				SASearch saSearch = new SASearch(30, 0.8f, trial, 1);
-				int[] path = saSearch.calculatePath(0);
+				int[] path = saSearch.calculatePath(RandomPath.getRandomPath(0));
 				int cost = PathCheck.getPathCost(path);
 				System.out.println("SA Cost : " + cost);
+
+				if(bestCost > cost){
+					minPath = path;
+					bestCost = cost;
+				}
 			}
 		}
 			case 2: {
@@ -131,7 +140,7 @@ public class MainClass {
 
 
 					// 5. 결과 파일 생성
-					//MapInfo.makeResultFile(bestCost, minPath);
+					MapInfo.makeResultFile(bestCost, minPath);
 
 					System.exit(0);
 				} catch (InterruptedException e) {

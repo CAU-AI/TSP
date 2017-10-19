@@ -3,6 +3,7 @@ package ga;
 import greedy.InsertSearch;
 import greedy.InverseSearch;
 import greedy.SwapSearch;
+import main.MainClass;
 import tspUtil.PathCheck;
 
 import java.util.ArrayList;
@@ -88,7 +89,8 @@ public class MyGASearch extends GASearch{
 			}
 			*/
 
-
+			MainClass.minPath = this.populationList[0].getPath();
+			MainClass.bestCost = this.populationList[0].getCost();
 			if(100 < count) {
 				System.out.println("cost : " + this.populationList[0].getCost());
 				count = 0;
