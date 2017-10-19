@@ -75,6 +75,8 @@ public class MainClass {
 
 				int numOfCity = MapInfo.getInstance().getNumOfCity();
 
+				
+
 				//Initialize by SA
 				Initializer saInitializer = new SAInitalizer(30, 0.8, 30, 1);
 
