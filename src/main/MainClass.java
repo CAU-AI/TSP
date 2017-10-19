@@ -66,24 +66,26 @@ public class MainClass {
 //		}
 
 		int populationSize = 10;
-		int generationSize = 1000;
+		int generationSize = 5000000;
 
 		//Initialize by SA
-		Initializer saInitializer = new SAInitalizer(30, 0.8, 1000, 1);
+		Initializer saInitializer = new SAInitalizer(30, 0.8, 3000, 1);
 
 		//Selection ptSelection = new PseudoTournamentSelection(populationSize, 10);
 		Selection ptSelection = new RouletteSelection();
 
 		Mutation swapMutation = new SwapMutation(0.3);
+		Mutation inversionMutation = new InversionMutation(0.3);
+		Mutation insertMutation = new InsertMutation(0.3);
 		//Mutation mutation = new NSCMutation(0.3, 4);
-		//Mutation mutation = new SAMutation(30, 0.8f, 1000, 1);
+		Mutation saMutation = new SAMutation(0.5f, 30, 0.8f, 3000, 1);
 
 		Crossover orderedCrossover = new OrderedCrossover();
 		Crossover pmxCrossover = new PMXCrossover();
 
 		MyGASearch myGASearch = new MyGASearch(populationSize , generationSize);
 
-		myGASearch.setProcess(saInitializer, orderedCrossover, ptSelection, swapMutation);
+		myGASearch.setProcess(saInitializer, orderedCrossover, ptSelection, saMutation);
 
 		int [] path = myGASearch.calculatePath(0);
 		for(int i = 0; i< myGASearch.generationScore.length;i++){
