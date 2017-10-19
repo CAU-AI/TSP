@@ -7,8 +7,7 @@ import tspUtil.PathCheck;
 import tspUtil.SwapCity;
 
 public class PMXCrossover implements Crossover{
-	
-	
+
 	
 	@Override
 	public GAElement[] crossover(GAElement firstParent, GAElement secondParent) {

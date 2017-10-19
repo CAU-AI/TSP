@@ -65,8 +65,8 @@ public class MainClass {
 //			ga[i].cost = PathCheck.getPathCost(ga[i].path);
 //		}
 
-		int populationSize = 10;
-		int generationSize = 1000;
+		int populationSize = 20;
+		int generationSize = 10000;
 
 		//Initialize by SA
 		Initializer saInitializer = new SAInitalizer(30, 0.8, 1000, 1);
@@ -77,11 +77,12 @@ public class MainClass {
 		Mutation swapMutation = new SwapMutation(0.3);
 		//Mutation nscMutation = new NSCMutation(0.3, 4);
 
+		Crossover orderedCrossover = new OrderedCrossover();
 		Crossover pmxCrossover = new PMXCrossover();
 
 		MyGASearch myGASearch = new MyGASearch(populationSize , generationSize);
 
-		myGASearch.setProcess(saInitializer, pmxCrossover, ptSelection, swapMutation);
+		myGASearch.setProcess(saInitializer, orderedCrossover, ptSelection, swapMutation);
 
 		int [] path = myGASearch.calculatePath(0);
 		for(int i = 0; i< myGASearch.generationScore.length;i++){

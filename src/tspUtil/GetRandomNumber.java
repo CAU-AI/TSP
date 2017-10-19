@@ -1,6 +1,7 @@
 package tspUtil;
 
 public class GetRandomNumber {
+
 	public static int[] getTwoRandomNumber(){
 		int[] arr = new int[2];
 		int numOfCity = MapInfo.getInstance().getNumOfCity();
