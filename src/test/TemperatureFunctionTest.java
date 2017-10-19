@@ -80,14 +80,14 @@ public class TemperatureFunctionTest {
 //	public void testNormal09_temp30(){
 //		beginTime = new Date();
 //		makeMapInfo();
-//		testNormal(loopCount, 0.9f, 30);
+//		testMutationRand(loopCount, 0.9f, 30);
 //	}
 //
 //	@Test
 //	public void testNormal09_temp50(){
 //		beginTime = new Date();
 //		makeMapInfo();
-//		testNormal(loopCount, 0.9f, 100);
+//		testMutationRand(loopCount, 0.9f, 100);
 //	}
 //
 //	@Test

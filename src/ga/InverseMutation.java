@@ -5,10 +5,10 @@ package ga;
         import tspUtil.PathCheck;
         import tspUtil.SwapCity;
 
-public class InversionMutation implements Mutation{
+public class InverseMutation implements Mutation{
 
     private double mutationRate;
-    public InversionMutation(double mutationRate) {
+    public InverseMutation(double mutationRate) {
         super();
         this.mutationRate = mutationRate;
     }

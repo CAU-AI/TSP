@@ -3,6 +3,7 @@ package ga;
 import tspUtil.TSPAlgorithm;
 
 public abstract class GASearch extends TSPAlgorithm {
+
 	protected int populationSize;
 	protected int generationSize;
 	
@@ -10,17 +11,16 @@ public abstract class GASearch extends TSPAlgorithm {
 	
 	protected Initializer initializer;
 	protected Selection selection;
-	protected Mutation[] mutation;
+	protected MutationType mutationType;
 	protected Crossover crossover;
 	
 	
 	public GASearch(int populationSize, int generationSize){
 		this.populationSize = populationSize;
 		this.generationSize = generationSize;
-		
+		this.mutationType = MutationType.SA;
 		this.populationList = null;
 		this.initializer = null;
-		this.mutation = null;
 		this.crossover = null;
 	}
 	
@@ -28,8 +28,8 @@ public abstract class GASearch extends TSPAlgorithm {
 		this.crossover = crossover;
 	}
 	
-	public void setMutation(Mutation[] mutation){
-		this.mutation = mutation;
+	public void setMutation(MutationType mutationType){
+		this.mutationType = mutationType;
 	}
 	public void setInitializer(Initializer initializer){
 		this.initializer = initializer;
@@ -39,10 +39,10 @@ public abstract class GASearch extends TSPAlgorithm {
 		this.selection = selection;
 	}
 	
-	public void setProcess(Initializer initializer, Crossover crossover, Selection selection, Mutation[] mutation){
+	public void setProcess(Initializer initializer, Crossover crossover, Selection selection, MutationType mutationType){
 		this.initializer = initializer;
 		this.crossover = crossover;
 		this.selection = selection;
-		this.mutation = mutation;
+		this.mutationType = mutationType;
 	}
 }

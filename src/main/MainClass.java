@@ -45,13 +45,14 @@ public class MainClass {
 		int searchMethod = scan.nextInt();
 
 
+		// 2. 타임 스레드생성
+		makeTimeThread(0);
+
 		// 1. 맵 인스턴스 생성
 		MapInfo.setMapInfoInstance(fileName, mapType);
 
 		System.out.println("맵 생성완료");
 
-		// 2. 타임 스레드생성
-		makeTimeThread(0);
 
 		switch(searchMethod){
 		case 1: {
@@ -75,23 +76,13 @@ public class MainClass {
 				Selection ptSelection = new RouletteSelection();
 
 
-				Mutation[] mutations = new Mutation[4];
-				Mutation swapMutation = new SwapMutation(0.3);
-				Mutation inversionMutation = new InversionMutation(0.3);
-				Mutation insertMutation = new InsertMutation(0.3);
-				Mutation saMutation = new SAMutation(0.3f, 30, 0.8f, 1, 1);
-
-				mutations[0] = swapMutation;
-				mutations[1] = inversionMutation;
-				mutations[2] = insertMutation;
-				mutations[3] = saMutation;
 
 				Crossover orderedCrossover = new OrderedCrossover();
 				Crossover pmxCrossover = new PMXCrossover();
 
 				MyGASearch myGASearch = new MyGASearch(populationSize, generationSize);
 
-				myGASearch.setProcess(saInitializer, orderedCrossover, ptSelection, mutations);
+				myGASearch.setProcess(saInitializer, orderedCrossover, ptSelection, MutationType.RAND);
 
 				int[] path = myGASearch.calculatePath(0);
 

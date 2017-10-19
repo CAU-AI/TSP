@@ -1,18 +1,26 @@
 package ga;
 
-import tspUtil.PathCheck;
-
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
 public class MyGASearch extends GASearch{
-	
+	protected Mutation[] mutations;
 	public int [] generationScore;
 	public MyGASearch(int populationSize, int generationSize) {
 		// TODO Auto-generated constructor stub
 		super(populationSize, generationSize);
 		this.generationSize = generationSize;
+
+		mutations = new Mutation[4];
+		Mutation swapMutation = new SwapMutation(0.3);
+		Mutation inverseMutation = new InverseMutation(0.3);
+		Mutation insertMutation = new InsertMutation(0.3);
+		Mutation saMutation = new SAMutation(0.3f, 30, 0.8f, 1, 1);
+
+		mutations[0] = swapMutation;
+		mutations[1] = inverseMutation;
+		mutations[2] = insertMutation;
+		mutations[3] = saMutation;
 	}
 
 	private static int count = 0;
@@ -45,8 +53,25 @@ public class MyGASearch extends GASearch{
 			populationList[populationList.length - 2] = child[0];
 			populationList[populationList.length - 1] = child[1];
 
-			int rand = (int)(new Random().nextFloat() * 100) % (mutation.length);
-			mutation[rand].doMutation(populationList);
+			switch(this.mutationType){
+			case RAND:
+				int rand = (int)(new Random().nextFloat() * 100) % (mutations.length);
+				mutations[rand].doMutation(populationList);
+				break;
+			case SWAP:
+				mutations[0].doMutation(populationList);
+				break;
+			case INVERSE:
+				mutations[1].doMutation(populationList);
+				break;
+			case INSERT:
+				mutations[2].doMutation(populationList);
+				break;
+			case SA:
+				mutations[3].doMutation(populationList);
+				break;
+			}
+
 
 			/*
 			GAElement[][] mutationList = new GAElement[3][populationList.length];
