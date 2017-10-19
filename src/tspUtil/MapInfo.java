@@ -5,6 +5,7 @@ import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class MapInfo {
 	//Singleton pattern
@@ -32,6 +33,7 @@ public class MapInfo {
 	private MapInfo(String filename,int mapType) {
 		this.setMapType(mapType, filename);
 		this.setNumOfCity(filename);
+		System.err.println("Start");
 		this.setDistanceMap(filename);
 	}
 
@@ -80,22 +82,15 @@ public class MapInfo {
 	
 	//지도 정보 초기화
 	//각 도시간의 거리를 나타내는 2차원 행렬로써 symmetric한 지도라고 가정
-	
 	private void setDistanceMap(String filename) {
 		this.distanceMap = new int[this.numOfCity][this.numOfCity];
 		if(mapType == MAP_TYPE_SQUARE || mapType==MAP_TYPE_TEST){
-			for(int i=0;i<numOfCity;i++){
-				for(int j=0;j<i;j++){
+			for(int i = 0; i < numOfCity; i++){
+				for(int j = 0; j < i; j++ ){
 					int distance = (int)Math.hypot(points[j].x - points[i].x, points[j].y - points[i].y); // 점 사이의 거리
-					this.distanceMap[i][j] =distance;
+					this.distanceMap[j][i] = this.distanceMap[i][j] = distance;
 				}
 				this.distanceMap[i][i] = 0;
-			}
-
-			for(int i = 0; i < numOfCity; i++){
-				for(int j = i + 1; j < numOfCity; j++){
-					this.distanceMap[i][j] = this.distanceMap[j][i];
-				}
 			}
 		}else{
 			BufferedReader reader = null;

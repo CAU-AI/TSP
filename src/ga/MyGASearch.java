@@ -1,5 +1,11 @@
 package ga;
 
+import greedy.InsertSearch;
+import greedy.InverseSearch;
+import greedy.SwapSearch;
+import tspUtil.PathCheck;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
@@ -71,42 +77,6 @@ public class MyGASearch extends GASearch{
 				mutations[3].doMutation(populationList);
 				break;
 			}
-
-
-			/*
-			GAElement[][] mutationList = new GAElement[3][populationList.length];
-			int mutationMin[] = new int[3];
-
-			for(int m = 0 ; m < 3 ; m++){
-				for(int ll = 0 ; ll < populationList.length; ll++){
-					mutationList[m][ll] = populationList[ll];
-				}
-				mutation[m].doMutation(mutationList[m]);
-
-				//최소값 찾기
-				mutationMin[m] = 1999999999;
-				for(int ll = 0 ; ll < populationList.length; ll++){
-					if(mutationList[m][ll].getCost() < mutationMin[m]) {
-						mutationMin[m] = mutationList[m][ll].getCost();
-					}
-				}
-			}
-
-			int mutaitionListMin = 0;
-			if(mutationMin[0] < mutationMin[1]){
-				if(mutationMin[0] > mutationMin[2]){
-					mutaitionListMin = 2;
-				}
-			}else{
-				if(mutationMin[1] < mutationMin[2]){
-					mutaitionListMin = 1;
-				}else{
-					mutaitionListMin = 2;
-				}
-			}
-
-			this.populationList = mutationList[mutaitionListMin];
-			*/
 
 			Arrays.sort(this.populationList, gaCom);
 
