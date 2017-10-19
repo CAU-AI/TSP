@@ -46,9 +46,9 @@ public class MyGASearch extends GASearch{
 
 			Arrays.sort(this.populationList, gaCom);
 
-			System.out.print("/");
+			System.out.println("/");
 			for(int k = 0 ; k < this.populationList.length; k ++){
-				//System.out.println("cost[" + k + "] : " + PathCheck.getPathCost(this.populationList[k].getPath()));
+				System.out.println("cost[" + k + "] : " + this.populationList[k].getCost());
 			}
 
 			this.generationScore[i] = this.populationList[0].getCost();

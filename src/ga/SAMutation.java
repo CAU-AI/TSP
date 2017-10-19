@@ -14,8 +14,9 @@ public class SAMutation implements Mutation {
 	int trial;
 	int coolingFunction;
 
-	public SAMutation(int temperature, float deltaTemperature, int trial, int coolingFunction) {
+	public SAMutation(double mutationRate, int temperature, float deltaTemperature, int trial, int coolingFunction) {
 		super();
+		this.mutationRate = mutationRate;
 		this.temperature = temperature;
 		this.deltaTemperature = deltaTemperature;
 		this.trial = trial;
@@ -27,11 +28,12 @@ public class SAMutation implements Mutation {
 		// TODO Auto-generated method stub
 		int populationSize = populationList.length;
 
-		//int mutationSize = (int) (populationSize * mutationRate);
+		int mutationSize = (int) (populationSize * mutationRate);
 
-		for (int i = 0; i < populationSize; i++) {
+
+		for (int i = 1; i <= mutationSize; i++) {
 			SASearch sa = new SASearch(this.temperature, this.deltaTemperature, trial, coolingFunction);
-			populationList[i].init(sa.calculatePath(populationList[i].getPath()));
+			populationList[populationSize - i].init(sa.calculatePath(populationList[populationSize - i].getPath()));
 		}
 	}
 }
