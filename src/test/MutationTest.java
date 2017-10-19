@@ -11,6 +11,7 @@ public class MutationTest {
 	private static Date beginTime;
 	private static int sum = 0;
 	private static int bestCost=0;
+	private static int loopCount = 1;
 
 
 	private void makeMapInfo(){
@@ -45,7 +46,7 @@ public class MutationTest {
 	public void testNormal08_temp50(){
 		beginTime = new Date();
 		makeMapInfo();
-		testNormal(loopCount, 0.8f, 100);
+		//testNormal(loopCount, 0.8f, 100);
 	}
 
 	@Before

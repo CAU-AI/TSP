@@ -37,94 +37,6 @@ public class MapInfo {
 
 	public void setMapType(int mapType, String filename){
 		this.mapType = mapType;
-		if(mapType == MAP_TYPE_SQUARE || mapType == MAP_TYPE_TEST){
-			convertFileToTriangleType(filename);
-		}
-	}
-
-	private void convertFileToTriangleType(String fileName){
-		BufferedReader reader = null;
-		FileWriter fw = null;
-		BufferedWriter writer = null;
-
-		try {
-			reader = new BufferedReader(new FileReader(fileName));
-			StringBuffer sb = new StringBuffer(fileName);
-			sb.insert(fileName.length() - 4, "_tri");
-			fw = new FileWriter(sb.toString(), false);
-			writer = new BufferedWriter(fw);
-		} catch (FileNotFoundException e) {
-			System.err.println("convertFileToTriangleType - File not found");
-			System.exit(1);
-		} catch (IOException E){
-			System.err.println("IO Exception");
-			System.exit(1);
-		}
-
-		String str = null;
-		dimension = 100000;
-		if(mapType == MAP_TYPE_SQUARE) {
-			for (int i = 0; i < 8; i++) {
-				try {
-					str = reader.readLine();
-				} catch (IOException e) {
-					System.err.println("File read error");
-					System.exit(1);
-				}
-				if (str == null || str.equals(""))
-					break;
-				if (i == 5) { //init dimension
-					dimension = Integer.parseInt(str.substring(12, str.length()));
-				}
-			}
-		}
-
-		int i=0;
-		points = new Point[dimension];
-		try {
-			for(;i<dimension;i++){
-				str = reader.readLine();
-				if(str == null)
-					break;
-				String[] splitedStr = str.split(" ");
-				points[i] = new Point(Integer.parseInt(splitedStr[1]), Integer.parseInt(splitedStr[2]));
-				for(int j=0; j<i;j++){
-					int distance = (int)Math.hypot(points[j].x - points[i].x, points[j].y - points[i].y); // 점 사이의 거리
-					writer.write(String.valueOf(distance));
-					writer.write(" ");
-				}
-				writer.write(String.valueOf(0) + " "); //자기 자신과의 거리
-				writer.newLine();
-			}
-			dimension = i;
-		} catch (IOException e) {
-			System.err.println("File read error");
-			e.printStackTrace();
-			System.exit(1);
-		}
-
-		//스트림 닫기
-		if(reader!=null){
-			try{
-				reader.close();
-			}catch(IOException e){
-				e.printStackTrace();
-			}
-		}
-		if(writer!=null){
-			try {
-				writer.close();
-			}catch (IOException e){
-
-			}
-		}
-		if(fw!=null){
-			try{
-				fw.close();
-			}catch(IOException e){
-
-			}
-		}
 	}
 	
 	public int getNumOfCity() {
@@ -171,85 +83,136 @@ public class MapInfo {
 	
 	private void setDistanceMap(String filename) {
 		this.distanceMap = new int[this.numOfCity][this.numOfCity];
-
 		if(mapType == MAP_TYPE_SQUARE || mapType==MAP_TYPE_TEST){
-			StringBuffer sb = new StringBuffer(filename);
-			filename = sb.insert(filename.length()-4, "_tri").toString(); //TRI용 변환 파일 사용
-		}
-
-		BufferedReader reader = null;
-
-		try {
-			reader = new BufferedReader(new FileReader(filename));
-		} catch (FileNotFoundException e) {
-			System.err.println("setDistanceMap - File not found");
-			System.exit(1);
-		}
-
-		for (int i = 0; i < numOfCity; i++) {
-			try {
-				String str = reader.readLine();
-
-				String[] splitedStr = str.split(" ");
-
-				for (int j = 0; j < splitedStr.length; j++) {
-					this.distanceMap[i][j] = Integer.parseInt(splitedStr[j]);
+			System.out.print("di : " );
+			for(int i=0;i<numOfCity;i++){
+				for(int j=0;j<i;j++){
+					int distance = (int)Math.hypot(points[j].x - points[i].x, points[j].y - points[i].y); // 점 사이의 거리
+					this.distanceMap[i][j] =distance;
 				}
+				this.distanceMap[i][i] = 0;
+			}
 
-			} catch (IOException e) {
-				System.err.println("File read error");
+			for(int i = 0; i < numOfCity; i++){
+				for(int j = i + 1; j < numOfCity; j++){
+					this.distanceMap[i][j] = this.distanceMap[j][i];
+				}
+			}
+		}else{
+			BufferedReader reader = null;
+
+			try {
+				reader = new BufferedReader(new FileReader(filename));
+			} catch (FileNotFoundException e) {
+				System.err.println("setDistanceMap - File not found");
 				System.exit(1);
 			}
-		}
-		try {
-			reader.close();
-		} catch (IOException e) {
-			System.err.println("Reader close error");
-			System.exit(1);
-		}
-		for(int i = 0; i < numOfCity; i++){
-			for(int j = i + 1; j < numOfCity; j++){
-				this.distanceMap[i][j] = this.distanceMap[j][i];
+
+			for (int i = 0; i < numOfCity; i++) {
+				try {
+					String str = reader.readLine();
+					String[] splitedStr = str.split(" ");
+					for (int j = 0; j < splitedStr.length; j++) {
+						this.distanceMap[i][j] = Integer.parseInt(splitedStr[j]);
+					}
+
+				} catch (IOException e) {
+					System.err.println("File read error");
+					System.exit(1);
+				}
+			}
+			try {
+				reader.close();
+			} catch (IOException e) {
+				System.err.println("Reader close error");
+				System.exit(1);
+			}
+			for(int i = 0; i < numOfCity; i++){
+				for(int j = i + 1; j < numOfCity; j++){
+					this.distanceMap[i][j] = this.distanceMap[j][i];
+				}
 			}
 		}
+
+
 	}
 	// 파일에서 도시의 숫자를 초기화
 	// 도시 개수 = 파일의 줄 수
-	private void setNumOfCity(String filename) {
+	private void setNumOfCity(String fileName) {
 		this.numOfCity = 0;
-
-		LineNumberReader reader = null;
 		if(mapType == MAP_TYPE_TEST || mapType==MAP_TYPE_SQUARE){
-			StringBuffer sb = new StringBuffer(filename);
-			filename = sb.insert(filename.length()-4, "_tri").toString(); //TRI용 변환 파일 사용
-		}
 
-		try {
-			reader = new LineNumberReader(new FileReader(filename));
-		} catch (FileNotFoundException e) {
-			System.err.println("setNumOfCity - File not found");
-			System.exit(1);
-		}
-		String str = null;
-		while (true) {
+			BufferedReader reader = null;
+
 			try {
-				str = reader.readLine();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				System.err.println("File read error");
+				reader = new BufferedReader(new FileReader(fileName));
+				StringBuffer sb = new StringBuffer(fileName);
+			} catch (FileNotFoundException e) {
+				System.err.println("convertFileToTriangleType - File not found");
+				System.exit(1);
+			} catch (IOException E){
+				System.err.println("IO Exception");
 				System.exit(1);
 			}
-			if (str == null || str.equals(""))
-				break;
 
-			this.numOfCity++;
+			String str = null;
+			dimension = 100000;
+			points = new Point[dimension];
+
+
+			try {
+				for(int i=0;i<dimension;i++){
+					str = reader.readLine();
+					if(str == null)
+						break;
+					String[] splitedStr = str.split(" ");
+					points[i] = new Point(Integer.parseInt(splitedStr[1]), Integer.parseInt(splitedStr[2]));
+					this.numOfCity++;
+				}
+			} catch (IOException e) {
+				System.err.println("File read error");
+				e.printStackTrace();
+				System.exit(1);
+			}
+
+			//스트림 닫기
+			if(reader!=null){
+				try{
+					reader.close();
+				}catch(IOException e){
+					e.printStackTrace();
+				}
+			}
+		}else{
+			LineNumberReader reader = null;
+			try {
+				reader = new LineNumberReader(new FileReader(fileName));
+			} catch (FileNotFoundException e) {
+				System.err.println("setNumOfCity - File not found");
+				System.exit(1);
+			}
+			String str = null;
+			while (true) {
+				try {
+					str = reader.readLine();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					System.err.println("File read error");
+					System.exit(1);
+				}
+				if (str == null || str.equals(""))
+					break;
+
+				this.numOfCity++;
+			}
+			try {
+				reader.close();
+			} catch (IOException e) {
+				System.err.println("Reader close error");
+				System.exit(1);
+			}
 		}
-		try {
-			reader.close();
-		} catch (IOException e) {
-			System.err.println("Reader close error");
-			System.exit(1);
-		}
+
 	}
 
 	static class Point{
