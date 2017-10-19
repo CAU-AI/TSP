@@ -53,7 +53,7 @@ public class MainClass {
 		switch(searchMethod){
 		case 1: {
 			while(true) {
-				SASearch saSearch = new SASearch(30, 0.8f, 5000, 1);
+				SASearch saSearch = new SASearch(30, 0.8f, 500, 1);
 				int[] path = saSearch.calculatePath(0);
 				int cost = PathCheck.getPathCost(path);
 				System.out.println("SA Cost : " + cost);
@@ -102,7 +102,7 @@ public class MainClass {
 			public void run() {
 				try {
 					beginDate = new Date();
-					Thread.sleep(120000); //여기를 조절해주세요
+					Thread.sleep(120000000); //여기를 조절해주세요
 
 					System.out.println("Final Best Cost : ");
 
