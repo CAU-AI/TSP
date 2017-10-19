@@ -11,6 +11,11 @@ public class RouletteSelection implements Selection {
 
 	public void setInputList(GAElement[] inputList){
 	    this.inputList = inputList;
+        getSum();
+    }
+
+    public void getSum(){
+	    sum = 0;
         for(int i = 0; i < inputList.length; i ++){
             sum += inputList[i].getFitness();
         }
@@ -27,6 +32,9 @@ public class RouletteSelection implements Selection {
 
     @Override
 	public void setParentList() {
+
+        getSum();
+
 	    Random random = new Random();
         double rate = random.nextDouble() * sum;
         double r = 0;

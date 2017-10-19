@@ -30,7 +30,6 @@ public class MyGASearch extends GASearch{
 		for(int i = 0; i < this.generationSize; i++){
 
 			//Arrays.sort(this.populationList, gaCom);
-			this.generationScore[i] = this.populationList[0].getCost();
 
 			this.selection.setParentList();
 
@@ -39,16 +38,25 @@ public class MyGASearch extends GASearch{
 			GAElement[] child = this.crossover.crossover(this.populationList[firstParent], this.populationList[secondParent]);
 
 
-			this.populationList[firstParent] = child[0];
-			this.populationList[secondParent] = child[1];
+			populationList[populationList.length - 2] = child[0];
+			populationList[populationList.length - 1] = child[1];
 
 			mutation.doMutation(populationList);
 
 
 			Arrays.sort(this.populationList, gaCom);
-			//System.out.println("short cost : " + PathCheck.getPathCost(this.populationList[0].getPath()));
+
+			System.out.println("/////////////////////////////////////");
+			for(int k = 0 ; k < this.populationList.length; k ++){
+				//System.out.println("cost[" + k + "] : " + PathCheck.getPathCost(this.populationList[k].getPath()));
+			}
+
+			this.generationScore[i] = this.populationList[0].getCost();
 		}
 		Arrays.sort(this.populationList, gaCom);
+
+
+
 
 
 		return populationList[0].getPath();
