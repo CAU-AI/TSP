@@ -21,6 +21,10 @@ public class GAElement {
 		this.fitness = (1.0f / cost) * 10;
 	}
 
+	public void setCost(int cost){
+		this.cost = cost;
+	}
+
 	public int[] getPath(){
 		return path;
 	}

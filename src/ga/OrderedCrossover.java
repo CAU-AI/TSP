@@ -33,26 +33,27 @@ public class OrderedCrossover implements Crossover {
 
 		int idx1 = secondPoint+1, idx2 = secondPoint+1;
 		int len = firstPath.length;
-		for(int i=0; i < len-secondPoint-1; i++){
-			while(hasPathInMiddle(firstPathMiddle, secondParent.getPath()[idx1%len]))
+		for(int i=secondPoint+1; i < len-1; i++){
+			while(hasPathInMiddle(firstPathMiddle, secondParent.getPath()[idx1%(len-1)]))
 				idx1+=1;
-			while(hasPathInMiddle(secondPathMiddle, firstParent.getPath()[idx2%len]))
+			while(hasPathInMiddle(secondPathMiddle, firstParent.getPath()[idx2%(len-1)]))
 				idx2+=1;
-			firstPath[i + secondPoint] = secondParent.getPath()[idx1%len];
-			secondPath[i + secondPoint] = firstParent.getPath()[idx2%len];
+			firstPath[i] = secondParent.getPath()[idx1%(len-1)];
+			secondPath[i] = firstParent.getPath()[idx2%(len-1)];
 			idx1++;
 			idx2++;
 		}
-		for(int i=0; i<firstPoint; i++){
-			while(hasPathInMiddle(firstPathMiddle, secondParent.getPath()[idx1%len]))
+		for(int i=0; i<firstPoint; i++,idx1++,idx2++){
+			while(hasPathInMiddle(firstPathMiddle, secondParent.getPath()[idx1%(len-1)]))
 				idx1+=1;
-			while(hasPathInMiddle(secondPathMiddle, firstParent.getPath()[idx2%len]))
+			while(hasPathInMiddle(secondPathMiddle, firstParent.getPath()[idx2%(len-1)]))
 				idx2+=1;
-			firstPath[i] = secondParent.getPath()[idx1%len];
-			secondPath[i] = firstParent.getPath()[idx2%len];
-			idx1++;
-			idx2++;
+			firstPath[i] = secondParent.getPath()[idx1%(len-1)];
+			secondPath[i] = firstParent.getPath()[idx2%(len-1)];
+
 		}
+		firstPath[len-1] = firstPath[0];
+		secondPath[len-1] = secondPath[0];
 
 		child[0].init(firstPath);
 		child[1].init(secondPath);

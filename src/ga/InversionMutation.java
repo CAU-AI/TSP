@@ -27,14 +27,14 @@ public class InversionMutation implements Mutation{
                 int mid = twoRandNumber[0] + ((twoRandNumber[1] + 1) - twoRandNumber[0]) / 2;
                 int endCount = twoRandNumber[1];
                 for (int j = twoRandNumber[0]; j < mid; j++) {
-                    int tmp = populationList[populationSize - i].path[j];
-                    populationList[populationSize - i].path[j] = populationList[populationSize - i].path[endCount];
-                    populationList[populationSize - i].path[endCount] = tmp;
+                    int tmp = populationList[populationSize - i].getPath()[j];
+                    populationList[populationSize - i].getPath()[j] = populationList[populationSize - i].getPath()[endCount];
+                    populationList[populationSize - i].getPath()[endCount] = tmp;
                     endCount--;
                 }
             }
 
-            populationList[populationSize - i].cost = PathCheck.getPathCost(populationList[populationSize - i].path);
+            populationList[populationSize - i].setCost(PathCheck.getPathCost(populationList[populationSize - i].getPath()));
         }
 
     }

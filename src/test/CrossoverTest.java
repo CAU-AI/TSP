@@ -24,7 +24,6 @@ public class CrossoverTest {
 			for(int j=0;j<gaChild[0].getPath().length;j++){
 				if(i!=j) {
 					if (gaChild[0].getPath()[i] == gaChild[0].getPath()[j]) {
-						System.out.println(gaChild[0].getPath()[i]);
 						equalCount++;
 					}
 				}
