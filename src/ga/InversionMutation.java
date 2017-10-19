@@ -34,7 +34,7 @@ public class InversionMutation implements Mutation{
                 }
             }
 
-            populationList[populationSize - i].setCost(PathCheck.getPathCost(populationList[populationSize - i].getPath()));
+            populationList[populationSize - i].init(populationList[populationSize - i].getPath());
         }
 
     }

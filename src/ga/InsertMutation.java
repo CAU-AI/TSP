@@ -30,7 +30,7 @@ public class InsertMutation implements Mutation{
                 populationList[populationSize - i].getPath()[j] = temp2;
             }
 
-            populationList[populationSize - i].setCost(PathCheck.getPathCost(populationList[populationSize - i].getPath()));
+            populationList[populationSize - i].init(populationList[populationSize - i].getPath());
         }
     }
 }

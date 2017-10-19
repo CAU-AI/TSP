@@ -65,7 +65,7 @@ public class MainClass {
 //			ga[i].cost = PathCheck.getPathCost(ga[i].path);
 //		}
 
-		int populationSize = 300;
+		int populationSize = 10;
 		int generationSize = 1000;
 
 		//Initialize by SA
@@ -87,9 +87,10 @@ public class MainClass {
 
 		int [] path = myGASearch.calculatePath(0);
 		for(int i = 0; i< myGASearch.generationScore.length;i++){
-			System.out.println("GA[" + i + "] : " + myGASearch.generationScore[i]);
+			//System.out.println("GA[" + i + "] : " + myGASearch.generationScore[i]);
 		}
 
+		System.out.println("");
 		System.out.println("GA: " + PathCheck.getPathCost(path));
 
 		return;
