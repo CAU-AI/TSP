@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.Scanner;
 
 import ga.*;
+import sa.SASearch;
 import tspUtil.MapInfo;
 import tspUtil.PathCheck;
 
@@ -40,60 +41,59 @@ public class MainClass {
 		}
 
 
+		System.out.print("Choose Search Method (1.SA , 2.GA) : ");
+		int searchMethod = scan.nextInt();
+
 		// 1. 맵 인스턴스 생성
 		MapInfo.setMapInfoInstance(fileName, mapType);
 
 		// 2. 타임 스레드생성
 		makeTimeThread(0);
 
-//
-//		GAElement[] ga = new GAElement[4];
-//
-//		// 3. SASearch 로 GA 4개 찾기
-//		for(int i = 0 ; i < 4; i ++) {
-//			int startIndex = 0;
-//
-//			// 2. SASearch 오브젝트 생성
-//			int limitTrial = 1000;
-//			limitTrial *= 1083/MapInfo.dimension;
-//			SASearch saSearch = new SASearch(30, 0.8f, limitTrial, 0);
-//
-//			ga[i] = new GAElement();
-//
-//			//two-opt greedy path 생성
-//			ga[i].path = saSearch.calculatePath(startIndex);
-//			ga[i].cost = PathCheck.getPathCost(ga[i].path);
-//		}
 
-		int populationSize = 10;
-		int generationSize = 1000;
+		switch(searchMethod){
+		case 1: {
+			while(true) {
+				SASearch saSearch = new SASearch(30, 0.8f, 500, 1);
+				int[] path = saSearch.calculatePath(0);
+				int cost = PathCheck.getPathCost(path);
+				System.out.println("SA Cost : " + cost);
+			}
+		}
+		case 2:{
+				int populationSize = 100;
+				int generationSize = 10000;
 
-		//Initialize by SA
-		Initializer saInitializer = new SAInitalizer(30, 0.8, 1000, 1);
+				//Initialize by SA
+				Initializer saInitializer = new SAInitalizer(30, 0.8, 1000, 1);
 
-		//Selection ptSelection = new PseudoTournamentSelection(populationSize, 10);
-		Selection ptSelection = new RouletteSelection();
+				//Selection ptSelection = new PseudoTournamentSelection(populationSize, 10);
+				Selection ptSelection = new RouletteSelection();
 
-		Mutation swapMutation = new SwapMutation(0.3);
-		//Mutation mutation = new NSCMutation(0.3, 4);
-		//Mutation mutation = new SAMutation(30, 0.8f, 1000, 1);
+				Mutation swapMutation = new SwapMutation(0.3);
+				//Mutation mutation = new NSCMutation(0.3, 4);
+				//Mutation mutation = new SAMutation(30, 0.8f, 1000, 1);
 
-		Crossover orderedCrossover = new OrderedCrossover();
-		Crossover pmxCrossover = new PMXCrossover();
+				Crossover orderedCrossover = new OrderedCrossover();
+				Crossover pmxCrossover = new PMXCrossover();
 
-		MyGASearch myGASearch = new MyGASearch(populationSize , generationSize);
+				MyGASearch myGASearch = new MyGASearch(populationSize , generationSize);
 
-		myGASearch.setProcess(saInitializer, orderedCrossover, ptSelection, swapMutation);
+				myGASearch.setProcess(saInitializer, orderedCrossover, ptSelection, swapMutation);
 
-		int [] path = myGASearch.calculatePath(0);
-		for(int i = 0; i< myGASearch.generationScore.length;i++){
-			//System.out.println("GA[" + i + "] : " + myGASearch.generationScore[i]);
+				int [] path = myGASearch.calculatePath(0);
+				for(int i = 0; i< myGASearch.generationScore.length;i++){
+					//System.out.println("GA[" + i + "] : " + myGASearch.generationScore[i]);
+				}
+
+				System.out.println("");
+				System.out.println("GA: " + PathCheck.getPathCost(path));
+
+				return;
+			}
 		}
 
-		System.out.println("");
-		System.out.println("GA: " + PathCheck.getPathCost(path));
 
-		return;
 	}
 
 
@@ -104,7 +104,7 @@ public class MainClass {
 			public void run() {
 				try {
 					beginDate = new Date();
-					Thread.sleep(3000000); //여기를 조절해주세요
+					Thread.sleep(120000); //여기를 조절해주세요
 
 					System.out.println("Final Best Cost : ");
 
