@@ -84,7 +84,6 @@ public class MapInfo {
 	private void setDistanceMap(String filename) {
 		this.distanceMap = new int[this.numOfCity][this.numOfCity];
 		if(mapType == MAP_TYPE_SQUARE || mapType==MAP_TYPE_TEST){
-			System.out.print("di : " );
 			for(int i=0;i<numOfCity;i++){
 				for(int j=0;j<i;j++){
 					int distance = (int)Math.hypot(points[j].x - points[i].x, points[j].y - points[i].y); // 점 사이의 거리
