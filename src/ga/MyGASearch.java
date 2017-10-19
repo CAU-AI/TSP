@@ -3,6 +3,7 @@ package ga;
 import tspUtil.PathCheck;
 
 import java.util.Arrays;
+import java.util.Random;
 
 public class MyGASearch extends GASearch{
 	
@@ -41,15 +42,17 @@ public class MyGASearch extends GASearch{
 			populationList[populationList.length - 2] = child[0];
 			populationList[populationList.length - 1] = child[1];
 
-			mutation.doMutation(populationList);
+			int rand = (int)(new Random().nextFloat() * 100) % (mutation.length -1);
+			mutation[rand].doMutation(populationList);
 
 
 			Arrays.sort(this.populationList, gaCom);
 
 			System.out.println("/");
 			for(int k = 0 ; k < this.populationList.length; k ++){
-				System.out.println("cost[" + k + "] : " + this.populationList[k].getCost());
+				//System.out.println("cost[" + k + "] : " + this.populationList[k].getCost());
 			}
+			System.out.println("cost[" + 0 + "] : " + this.populationList[0].getCost());
 
 			this.generationScore[i] = this.populationList[0].getCost();
 		}

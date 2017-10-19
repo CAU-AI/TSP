@@ -44,46 +44,62 @@ public class MainClass {
 		System.out.print("Choose Search Method (1.SA , 2.GA) : ");
 		int searchMethod = scan.nextInt();
 
+
+		System.out.println("맵 생성중...");
+
 		// 1. 맵 인스턴스 생성
 		MapInfo.setMapInfoInstance(fileName, mapType);
 
+
+		System.out.print("생성완료! 시작하시겠습니까? : ");
+		scan.next();
+		System.out.println("\n시작!");
 		// 2. 타임 스레드생성
 		makeTimeThread(0);
 
-		switch(searchMethod){
-		case 1: {
-			while(true) {
-				SASearch saSearch = new SASearch(30, 0.8f, 5000, 1);
-				int[] path = saSearch.calculatePath(0);
-				int cost = PathCheck.getPathCost(path);
-				System.out.println("SA Cost : " + cost);
+
+
+
+		switch(searchMethod) {
+			case 1: {
+				while (true) {
+					SASearch saSearch = new SASearch(30, 0.8f, 5000, 1);
+					int[] path = saSearch.calculatePath(0);
+					int cost = PathCheck.getPathCost(path);
+					System.out.println("SA Cost : " + cost);
+				}
 			}
-		}
-		case 2:{
-				int populationSize = 100;
+			case 2: {
+				int populationSize = 10;
 				int generationSize = 5000000;
 
 
 				//Initialize by SA
-				Initializer saInitializer = new SAInitalizer(30, 0.8, 3000, 1);
+				Initializer saInitializer = new SAInitalizer(30, 0.8, 100, 1);
 
 				//Selection ptSelection = new PseudoTournamentSelection(populationSize, 10);
 				Selection ptSelection = new RouletteSelection();
 
+
+				Mutation[] mutations = new Mutation[4];
 				Mutation swapMutation = new SwapMutation(0.3);
 				Mutation inversionMutation = new InversionMutation(0.3);
 				Mutation insertMutation = new InsertMutation(0.3);
-				//Mutation mutation = new NSCMutation(0.3, 4);
-				Mutation saMutation = new SAMutation(0.5f, 30, 0.8f, 3000, 1);
+				Mutation saMutation = new SAMutation(0.5f, 30, 0.8f, 100, 1);
+
+				mutations[0] = swapMutation;
+				mutations[1] = inversionMutation;
+				mutations[2] = insertMutation;
+				mutations[3] = saMutation;
 
 				Crossover orderedCrossover = new OrderedCrossover();
 				Crossover pmxCrossover = new PMXCrossover();
 
-				MyGASearch myGASearch = new MyGASearch(populationSize , generationSize);
+				MyGASearch myGASearch = new MyGASearch(populationSize, generationSize);
 
-				myGASearch.setProcess(saInitializer, orderedCrossover, ptSelection, saMutation);
+				myGASearch.setProcess(saInitializer, orderedCrossover, ptSelection, mutations);
 
-				int [] path = myGASearch.calculatePath(0);
+				int[] path = myGASearch.calculatePath(0);
 
 				System.out.println("");
 				System.out.println("GA: " + PathCheck.getPathCost(path));
