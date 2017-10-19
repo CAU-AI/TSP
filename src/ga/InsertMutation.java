@@ -25,12 +25,12 @@ public class InsertMutation implements Mutation{
             int[] twoRandNumber = GetRandomNumber.getTwoRandomNumber();
 
             for (int j = twoRandNumber[1] - 1; j > twoRandNumber[0]; j--) {
-                int temp2 = populationList[populationSize - i].path[j + 1];
-                populationList[populationSize - i].path[j + 1] = populationList[populationSize - i].path[j];
-                populationList[populationSize - i].path[j] = temp2;
+                int temp2 = populationList[populationSize - i].getPath()[j + 1];
+                populationList[populationSize - i].getPath()[j + 1] = populationList[populationSize - i].getPath()[j];
+                populationList[populationSize - i].getPath()[j] = temp2;
             }
 
-            populationList[populationSize - i].cost = PathCheck.getPathCost(populationList[populationSize - i].path);
+            populationList[populationSize - i].init(populationList[populationSize - i].getPath());
         }
     }
 }
